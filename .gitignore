@@ -13,6 +13,7 @@ dist-ssr
 *.local
 
 video.mp4
+interaividades
 
 # Editor directories and files
 .vscode/*
