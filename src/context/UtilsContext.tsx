@@ -1,5 +1,5 @@
 import { createContext, useState } from 'react';
-import { UtilsContextTypes } from '../tests/utils/types';
+import { UtilsContextTypes } from '../utils/types';
 
 export const UtilsContext = createContext({} as UtilsContextTypes);
 // export const UtilsContext = createContext<UtilsContextTypes | undefined>(undefined);

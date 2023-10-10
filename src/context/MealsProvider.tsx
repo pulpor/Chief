@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import MealsContext from './MealsContext';
-import { Meal } from '../tests/utils/types';
+import { Meal } from '../utils/types';
 
 type MealsProviderType = {
   children:React.ReactNode

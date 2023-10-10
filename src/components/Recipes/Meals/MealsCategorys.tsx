@@ -1,8 +1,7 @@
-/* eslint-disable react/jsx-key */
 import { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import MealsContext from '../../../context/MealsContext';
-import { Meal } from '../../../tests/utils/types';
+import { Meal } from '../../../utils/types';
 
 function MealsCategorys() {
   const { meals } = useContext(MealsContext);
@@ -63,30 +62,44 @@ function MealsCategorys() {
 
   return (
     <div>
+
       <div className="idCategorys">
         <div className="categorys">
-          <button
-            onClick={ handleClearFilters }
-            data-testid="All-category-filter"
-          >
-            All
-          </button>
+          <div className="buttons">
+            <button
+              className='btn-hover color-4'
+              onClick={ handleClearFilters }
+              data-testid="All-category-filter"
+            >
+              All
+            </button>
+          </div>
 
           {categories.map((categoryName) => (
-            <button
-              key={ categoryName.strCategory }
-              data-testid={ `${categoryName.strCategory}-category-filter` }
-              onClick={ () => handleCategoryClick(categoryName.strCategory) }
-            >
-              {categoryName.strCategory}
+            <div className="buttons">
+              <button
+                className='btn-hover color-4'
+                key={ categoryName.strCategory }
+                data-testid={ `${categoryName.strCategory}-category-filter` }
+                onClick={ () => handleCategoryClick(categoryName.strCategory) }
+              >
+                {categoryName.strCategory}
 
-            </button>
+              </button>
+            </div>
           ))}
         </div>
       </div>
+
       <div className="containerCategorys">
         {filteredMeals.map((meal, index) => (
-          <Link to={ `/meals/${meal.idMeal}` } key={ meal.idMeal }>
+          <Link 
+            to={ `/meals/${meal.idMeal}` } 
+            key={ meal.idMeal }
+            style={{
+              textDecoration: 'none', 
+              color: 'inherit', 
+            }}>
             <div data-testid={ `${index}-recipe-card` } className="cardCategorys">
 
               <img
@@ -95,14 +108,16 @@ function MealsCategorys() {
                 src={ meal.strMealThumb }
                 alt={ meal.strMeal }
               />
+              
+              <div className="containerh2">
+                <h2
+                  className="cardText"
+                  data-testid={ `${index}-card-name` }
+                >
+                  {meal.strMeal}
 
-              <h2
-                className="cardText"
-                data-testid={ `${index}-card-name` }
-              >
-                {meal.strMeal}
-
-              </h2>
+                </h2>
+              </div>
 
             </div>
           </Link>

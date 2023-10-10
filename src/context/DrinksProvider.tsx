@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import DrinksContext from './DrinksContext';
-import { Drink } from '../tests/utils/types';
+import { Drink } from '../utils/types';
 
 type DrinksProviderType = {
   children: React.ReactNode

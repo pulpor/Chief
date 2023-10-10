@@ -1,0 +1,190 @@
+
+
+.containerImgPrincipal{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 380px;
+}
+
+#principalDetail {
+  width: 320px;
+  height: 320px;
+  border-radius: 15%;
+}
+
+.containerDetails{
+  margin-bottom: 60px;
+  width: 100%;
+}
+
+.btnRecipe{
+  margin-bottom: 25px;
+}
+
+.h2Details{
+  font-size: 30px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #e75516;
+  text-transform: uppercase;
+  width: 100%;
+  max-width: 150px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pDetails{
+  font-size: 12px;
+  font-family: Arial, Helvetica, sans-serif;
+  width: 100%;
+  color: #161e27;
+  max-width: 150px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.h3Details, .h3Details2{
+  margin-top: 30px;
+  font-size: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #e75516;
+  width: 100%;
+  max-width: 150px;
+  margin-left: 20px;
+}
+
+.h3Details2{
+  font-size: 20px;
+}
+
+.itensDetails{
+  margin-top: 10px;
+  margin-left: 20px;
+  margin-bottom: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  width: 300px;
+}
+
+.liDetails{
+  margin-top: 6px;
+  padding-top: 4px;
+  width: 300px;
+}
+
+.p2Details{
+  width: 340px;
+  margin: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+
+
+/* carousel */
+
+
+.container {
+  width: 100%;
+  max-width: 350px; /* Defina a largura máxima desejada */
+  margin: 0 auto;
+}
+
+.slide {
+  position: relative;
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+.imagens {
+  display: flex;
+  aspect-ratio: 16 / 9;
+  overflow-x: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  box-shadow: 0 1.5rem 3rem -0.75rem hsla(0, 0%, 0%, 0.25);
+  border-radius: 2rem; 
+}
+
+.imagens img {
+  flex: 1 0 100%;
+  scroll-snap-type: start;
+  object-fit: cover;
+  width: 350px;
+}
+
+.menu {
+  display: flex;
+  column-gap: 1rem;
+  position: absolute;
+  bottom: -1rem;
+  left: 50%; 
+  transform: translateX(-50%);
+  z-index: 1; 
+}
+
+.menu a {
+  width: 0.5rem;
+  height: 0.5em;
+  border-radius: 50%;
+  background-color: #e75517;
+  opacity: 0.6;
+  transition: opacity ease 250ms;
+}
+
+.menu a:hover {
+  opacity: 1;
+}
+
+#sugestao{
+  width: 320px;
+  height: 320px;
+  border-radius: 15%;
+}
+
+.slide-image {
+  border-radius: 15%;
+}
+
+.imagemCarouselContainer{
+  width: 350px;
+  height: 350px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.barrinha{
+  color: #e75516;
+  text-decoration: none;
+  width: 100%;
+  font-size: 20px;
+  margin-left: 30px;
+}
+
+.barrinhaInferior{
+  background-color: aqua;
+}
+
+#buttonCoracao{
+  background-color: transparent;
+  border: none;
+}
+
+.youtubeContainer{
+  width: 100%;
+  height: 180px;
+}
+
+.youtube {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 399px;
+}
+

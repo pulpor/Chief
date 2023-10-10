@@ -10,7 +10,8 @@ export interface SearchBarProps {
 }
 
 export interface Meal {
-  meals: any;
+  meals: string;
+  key: string;
   idMeal: string;
   strMeal: string;
   isfood: string;

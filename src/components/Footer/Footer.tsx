@@ -3,17 +3,19 @@ import { Link } from 'react-router-dom';
 function Footer() {
   return (
     <nav>
-      <footer data-testid="footer">
+      <footer data-testid="footer" className='footer'>
         <Link to="/drinks">
           <img
-            src="src/images/drinkIcon.svg"
+            id="alcool"
+            src="src/images/alcool.png"
             alt="icone de bebidas"
             data-testid="drinks-bottom-btn"
           />
         </Link>
         <Link to="./meals">
           <img
-            src="src/images/mealIcon.svg"
+            id="cutlery"
+            src="src/images/cutlery.png"
             alt="icone de comidas"
             data-testid="meals-bottom-btn"
           />

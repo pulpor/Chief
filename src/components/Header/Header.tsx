@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import profileIcon from '../../images/profileIcon.svg';
-import searchIcon from '../../images/searchIcon.svg';
+import profileIcon from '../../images/pessoa.png';
+import searchIcon from '../../images/lupa.png';
 import SearchBar from './SearchBar';
-import logo from '../../images/logo.png';
+import logo from '../../images/logo_head.png';
 import burrito from '../../images/meats/burritos.png';
 
 function Header() {
@@ -36,33 +36,46 @@ function Header() {
     <header>
       <div className="Header">
 
-        <img src={ logo } alt="logo principal" />
+        <Link to="/meals">
+          <img src={ logo } id="logoChief" alt="logo principal" />
+        </Link>
+
 
         <div className="iconesHeader">
 
           {showSearchIcon && (
-            <button onClick={ toggleSearch }>
+            <button onClick={ toggleSearch } className='lupa'>
               <img
                 data-testid="search-top-btn"
+                id="lupa"
                 src={ searchIcon }
                 alt="Search Icon"
               />
             </button>
           )}
 
-          {isSearchVisible && (
-            <SearchBar />
-          )}
-
           <Link to="/profile">
-            <img src={ profileIcon } alt="Profile" data-testid="profile-top-btn" />
+            <img src={ profileIcon } alt="Profile" data-testid="profile-top-btn" id="userIcon"/>
           </Link>
         </div>
       </div>
-      <div className="logoContainerHeader">
-        <img src={ burrito } id="burrito" alt="burrito's logo" />
-        <h1 data-testid="page-title">{getTitle()}</h1>
+      
+       {window.location.pathname === '/meals' && (
+          <div className="logoContainerHeader">
+          
+              <img src={burrito} id="burrito" alt="burrito's logo" />
+          
+            <h1 className='page-title' data-testid="page-title">{getTitle()}</h1>
+          </div> 
+        )}
+
+
+      <div className="searchCss">
+        {isSearchVisible && (
+          <SearchBar />
+        )}
       </div>
+
     </header>
   );
 }

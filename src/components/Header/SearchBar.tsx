@@ -9,10 +9,10 @@ import {
   searchDrinksByName,
   searchDrinksByFirstLetter,
   searchDrinksByIngredient,
-} from '../../tests/utils/Api';
+} from '../../utils/Api';
 
 // tipagem
-import { Drink, Meal } from '../../tests/utils/types';
+import { Drink, Meal } from '../../utils/types';
 import Footer from '../Footer/Footer';
 import DrinksContext from '../../context/DrinksContext';
 import MealsContext from '../../context/MealsContext';
@@ -108,9 +108,10 @@ function SearchBar() {
   };
 
   return (
-    <div>
+    <div className='searchContainer'>
 
       <input
+        className='inputSearch'
         data-testid="search-input"
         type="text"
         value={ myQuery }
@@ -118,42 +119,63 @@ function SearchBar() {
         placeholder="Search"
       />
 
-      <div>
-        <label>
-          <input
-            data-testid="ingredient-search-radio"
-            type="radio"
-            value="ingredient"
-            checked={ searchType === 'ingredient' }
-            onChange={ () => setSearchType('ingredient') }
-          />
-          Ingredient
-        </label>
+      <div className="radioContainer"> 
 
-        <label>
+        <div className="radio1">
+          <label htmlFor="radio1">
+            <input
+              id="radio1"
+              data-testid="ingredient-search-radio"
+              type="radio"
+              value="ingredient"
+              checked={ searchType === 'ingredient' }
+              onChange={ () => setSearchType('ingredient') }
+            />
+            <div className="custom-radio">
+              <span></span>
+            </div>
+            <span>Ingredient</span>
+            
+          </label>
+        </div>
+
+        <div className="radio2">
+        <label htmlFor="radio2">
           <input
+            id="radio2"
             data-testid="name-search-radio"
             type="radio"
             value="name"
             checked={ searchType === 'name' }
             onChange={ () => setSearchType('name') }
           />
-          Name
+          <div className="custom-radio">
+            <span></span>
+          </div>
+          <span>Name</span>
         </label>
+        </div>
 
-        <label>
-          <input
-            data-testid="first-letter-search-radio"
-            type="radio"
-            value={ FIRST_LETTER }
-            checked={ searchType === FIRST_LETTER }
-            onChange={ () => setSearchType(FIRST_LETTER) }
-          />
-          First Letter
-        </label>
+        <div className="radio3">
+          <label htmlFor="radio3">
+            <input
+              id="radio3"
+              data-testid="first-letter-search-radio"
+              type="radio"
+              value={ FIRST_LETTER }
+              checked={ searchType === FIRST_LETTER }
+              onChange={ () => setSearchType(FIRST_LETTER) }
+            />
+            <div className="custom-radio">
+              <span></span>
+            </div><span>First Letter</span>
+            
+          </label>
+        </div>
+
       </div>
 
-      <button data-testid="exec-search-btn" onClick={ HandleSearch }>
+      <button data-testid="exec-search-btn" className='btn-hover color-4' onClick={ HandleSearch }>
         Search
       </button>
 

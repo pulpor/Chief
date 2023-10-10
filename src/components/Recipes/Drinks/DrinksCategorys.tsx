@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Drink } from '../../../tests/utils/types';
+import { Drink } from '../../../utils/types';
 import DrinksContext from '../../../context/DrinksContext';
 
 function DrinksCategorys() {
