@@ -9,7 +9,6 @@ function MealsCategorys() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [filteredMeals, setFilteredMeals] = useState<Meal[]>([]);
 
-  // Carrega as categorias no carregamento inicial
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -26,7 +25,6 @@ function MealsCategorys() {
     fetchCategories();
   }, []);
 
-  // Filtra as receitas com base na categoria selecionada ou exibe todas as receitas
   useEffect(() => {
     const fetchFilteredMeals = async () => {
       if (selectedCategory) {
@@ -76,18 +74,18 @@ function MealsCategorys() {
           </div>
 
           {categories.map((categoryName) => (
-            <div className="buttons">
+            <div className="buttons" key={categoryName.strCategory}>
               <button
                 className='btn-hover color-4'
-                key={ categoryName.strCategory }
-                data-testid={ `${categoryName.strCategory}-category-filter` }
-                onClick={ () => handleCategoryClick(categoryName.strCategory) }
+                data-testid={`${categoryName.strCategory}-category-filter`}
+                onClick={() => handleCategoryClick(categoryName.strCategory)}
               >
                 {categoryName.strCategory}
-
               </button>
             </div>
           ))}
+
+          
         </div>
       </div>
 

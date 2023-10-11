@@ -14,7 +14,6 @@ function DoneRecipes() {
     if (DoneRecipesLS) {
       const newDoneRecipes: FavoriteAndDoneRecipes[] = JSON.parse(DoneRecipesLS);
 
-      // Filtra os recipes com base no filtro selecionado
       const filteredRecipes = filterRecipes(newDoneRecipes, filter);
 
       setDoneRecipes(filteredRecipes);
@@ -43,21 +42,16 @@ function DoneRecipes() {
 
   const [url, setUrl] = useState('meals');
 
-  // const filterMeals = () => {
-  //      const filteredMeals = doneRecipes.filter((recipe) => recipe.type === filter);
-  //   setDoneFiltered(filteredMeals);
-  // };
-
   const filterMeals = () => {
-    setFilter('meal'); // Define o filtro para comidas
+    setFilter('meal');
   };
 
   const filterDrinks = () => {
-    setFilter('drink'); // Define o filtro para bebidas
+    setFilter('drink');
   };
 
   const clearFilter = () => {
-    setFilter(null); // Remove o filtro
+    setFilter(null);
   };
 
   return (
@@ -136,7 +130,6 @@ function DoneRecipes() {
                 </div>
                 {' '}
 
-                {/* Renderizar as tags com data-testid */}
                 {recipe.tags && Array.isArray(recipe.tags) && recipe.tags
                   .slice(0, 2).map((tag: any, tagIndex: any) => (
                     <p

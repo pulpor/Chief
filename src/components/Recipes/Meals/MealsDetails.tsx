@@ -13,16 +13,23 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import YouTube from 'react-youtube';
 import { Drink, Meal } from '../../../utils/types';
 
+import share from '../../../images/share.png'
+
+
 function RecipeVideo({ strYoutube }: { strYoutube: string }) {
   if (!strYoutube) {
     return null;
   }
 
   const videoId = strYoutube.split('v=')[1];
+  const options = { 
+    height: '250px',
+    width: '100%'
+  };
 
   return (
     <div className="youtubeContainer" data-testid="video">
-      <YouTube className="youtube" videoId={videoId} />
+      <YouTube className="youtube" videoId={videoId} opts={options} /> 
     </div>
   );
 }
@@ -178,14 +185,23 @@ function MealDetails() {
             { recipe.strInstructions.replace(regex, '.\n') }
           </p>
 
-          {memoizedRecipeVideo}
+        <div className="containerFundo">
+          <button
+            data-testid="start-recipe-btn"
+            onClick={ HandleClick }
+            className={`recipe-button btn-hover color-4 btnRecipe`}
+          >
+            Continue Recipe
+          </button>
+        </div>
 
-          <h3 className='h3Details2'>
-            Acompanhamento:
-          </h3>
+          {memoizedRecipeVideo}
+        
+        <h3 className='h3Details2'>
+          Acompanhamento:
+        </h3>
 
         <div className="container">
-          
           <Slider {...settingsSlider}>
 
             {drinks.slice(0, 6).map((receita: Drink, index: number) => (
@@ -212,44 +228,49 @@ function MealDetails() {
 
               </Link>
 
-              <div className="barrinhaInferior">
 
-                <Link to={`/drinks/${receita.idDrink}`} key={receita.idDrink}>
-                  <span
-                      data-testid={`${index}-recommendation-title`}
-                      className='barrinha'
-                    >
-                      {receita.strDrink}
-                  </span>
-                </Link>
+              <div className="containerBarrinha">
+                <div className="barrinhaInferior">
 
+                  <Link className='linkDrinkRecommendation' to={`/drinks/${receita.idDrink}`} key={receita.idDrink}>
+                    <span
+                        data-testid={`${index}-recommendation-title`}
+                        className='nameDrinkRecommendation'
+                      >
+                        {receita.strDrink}
+                    </span>
+                  </Link>
 
-                  { copied && <p>Link copied!</p> }
-                  <button
-                    data-testid="share-btn"
-                    onClick={ handleShare }
-                  >
-                    Share
-                  </button>
+                    { copied && <p>Link copied!</p> }
 
-                  {favorite ? (
-                      <button onClick={handleFavoritre} id="buttonCoracao">
-                        <FontAwesomeIcon
-                          icon={faHeartSolid}
-                          data-testid="favorite-btn"
-                          color="red" 
-                        />
-                      </button>
-                    ) : (
-                      <button onClick={handleFavoritre}>
-                        <FontAwesomeIcon
-                          icon={faHeartRegular}
-                          data-testid="favorite-btn"
-                          color="black"
-                        />
-                      </button>
-                  )}
-            </div>
+                    <div className="agrupamentoRecommendation">
+                      <img src={ share } alt="" 
+                        className="shareIcon"
+                        data-testid="share-btn"
+                        onClick={ handleShare }
+                      />
+
+                      {favorite ? (
+                          <div onClick={handleFavoritre} 
+                          className="botaoCoracao">
+                            <FontAwesomeIcon
+                              icon={faHeartSolid}
+                              data-testid="favorite-btn"
+                              color="red" 
+                            />
+                          </div>
+                        ) : (
+                          <div onClick={handleFavoritre} className="botaoCoracao">
+                            <FontAwesomeIcon
+                              icon={faHeartRegular}
+                              data-testid="favorite-btn"
+                              color="black"
+                            />
+                          </div>
+                      )}
+                    </div>
+                </div>
+              </div>
 
             </>
             ))}
@@ -257,16 +278,7 @@ function MealDetails() {
           </Slider>
         </div>
 
-
-          <button
-            data-testid="start-recipe-btn"
-            onClick={ HandleClick }
-            className={`recipe-button btn-hover color-4 btnRecipe`}
-          >
-            Continue Recipe
-          </button>
-
-        </div>
+      </div>
       ) : (null) }
 
     </div>

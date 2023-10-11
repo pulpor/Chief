@@ -8,7 +8,7 @@ import burrito from '../../images/meats/burritos.png';
 
 function Header() {
   const location = useLocation();
-  const showSearchIcon = ['/meals', '/drinks'].includes(location.pathname);
+  const showSearchIcon = location.pathname.startsWith('/meals') || location.pathname.startsWith('/drinks');
   const [isSearchVisible, setIsSearchVisible] = useState(false);
 
   const toggleSearch = () => {
@@ -44,18 +44,23 @@ function Header() {
         <div className="iconesHeader">
 
           {showSearchIcon && (
-            <button onClick={ toggleSearch } className='lupa'>
+            <div onClick={ toggleSearch } className='lupa'>
               <img
                 data-testid="search-top-btn"
                 id="lupa"
                 src={ searchIcon }
                 alt="Search Icon"
               />
-            </button>
+            </div>
           )}
 
           <Link to="/profile">
-            <img src={ profileIcon } alt="Profile" data-testid="profile-top-btn" id="userIcon"/>
+            <img 
+              data-testid="profile-top-btn" 
+              id="userIcon"
+              src={ profileIcon } 
+              alt="Profile" 
+            />
           </Link>
         </div>
       </div>

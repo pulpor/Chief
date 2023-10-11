@@ -1,8 +1,32 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Meal } from '../../../utils/types';
-import whiteHeartIcon from '../../../images/whiteHeartIcon.svg';
-import blackHeartIcon from '../../../images/blackHeartIcon.svg';
+import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
+import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import YouTube from 'react-youtube';
+
+import share from '../../../images/share.png'
+
+function RecipeVideo({ strYoutube }: { strYoutube: string }) {
+  if (!strYoutube) {
+    return null;
+  }
+
+  const videoId = strYoutube.split('v=')[1];
+  const options = { 
+    height: '250px',
+    width: '100%'
+  };
+
+  return (
+    <div className="youtubeContainer" data-testid="video">
+      <YouTube className="youtube" videoId={videoId} opts={options} /> 
+    </div>
+  );
+}
+
+
 
 function MealsInProgress() {
   const { recipeId } = useParams();
@@ -13,15 +37,19 @@ function MealsInProgress() {
   const [favorite, setFavorite] = useState(false);
 
   const getIngredients = (meal: any) => {
-    const ingredients = [];
-    for (let i = 1; i <= 20; i++) { // limite de 20 ingredientes no loop
+    const ingredientsSet = new Set();
+  
+    for (let i = 1; i <= 20; i++) {
       const ingredient = meal && meal[`strIngredient${i}`];
       if (ingredient) {
-        ingredients.push(ingredient);
+        ingredientsSet.add(ingredient);
       }
     }
-    return ingredients;
+  
+    const uniqueIngredients = Array.from(ingredientsSet);  
+    return uniqueIngredients;
   };
+  
 
   useEffect(() => {
     const fetchRecipeDetails = async () => {
@@ -122,13 +150,12 @@ function MealsInProgress() {
     setFavorite(!isFavorite);
   };
 
-  // const navigate = useNavigate();
-  // const HandleClick = () => {
-  //   navigate('/done-recipes');
-  // };
   const navigate = useNavigate();
+  const regex = /\./g;
+
   const HandleClick = () => {
-    const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes') ?? '') || [];
+    const storedData = localStorage.getItem('doneRecipes');
+    const doneRecipes = storedData ? JSON.parse(storedData) : [];
     const { idMeal, strCategory, strMeal, strMealThumb, strArea } = trem[0];
     const completedRecipe = {
       id: idMeal,
@@ -142,69 +169,125 @@ function MealsInProgress() {
     doneRecipes.push(completedRecipe);
     localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
     navigate('/done-recipes');
+};
+
+
+  const handleFavoritre = () => {
+    setFavorite(!favorite);
   };
+
+  const strYoutube = trem[0]?.strYoutube ?? '';
+  const memoizedRecipeVideo = useMemo(() => {
+    return <RecipeVideo strYoutube={strYoutube} />;
+  }, [strYoutube]);
 
   return (
     <div>
-      <img data-testid="recipe-photo" alt="foto" />
-      <h1 data-testid="recipe-title">{}</h1>
 
-      <div className="label-checkbox">
-        {getIngredients(trem[0]).map((ingredient, index) => (
-          <div key={ index }>
-            <label
-              data-testid={ `${index}-ingredient-step` }
-              style={ { textDecoration: completedIngredients
-                .includes(ingredient) ? 'line-through solid rgb(0, 0, 0)' : 'none' } }
-            >
-              <input
-                type="checkbox"
-                value={ ingredient }
-                onClick={ () => handleIngredientClick(ingredient) }
-                checked={ completedIngredients.includes(ingredient) }
-              />
-              {ingredient}
-            </label>
+      {trem[0] ? (
+        <>
+          <div className="containerImgPrincipal" >
+            
+            <img 
+              data-testid="recipe-photo" 
+              alt="foto"
+              id="principalDetail"
+              src={trem[0].strMealThumb || ''}
+            /> 
+
           </div>
-        ))}
+
+          <h2 className='h2Details' data-testid="recipe-title">
+            {trem[0].strMeal}
+          </h2> 
+
+          <p className='pDetails' data-testid="recipe-category">
+              { trem[0].strCategory }
+          </p>
+        </>
+       
+      ) : (
+        <p>Carregando...</p>
+      )}      
+
+      <div className="containerLabel">
+        <div className="label-checkbox">
+          {getIngredients(trem[0]).map((ingredient, index) => (
+            <div key={index}>
+              <label
+                htmlFor={`checkbox-${index}`}
+                className="custom-checkbox-label"
+                data-testid={`${index}-ingredient-step`}
+              >
+                <input
+                  className="custom-checkbox"
+                  type="checkbox"
+                  id={`checkbox-${index}`}
+                  value={ingredient}
+                  onClick={() => handleIngredientClick(ingredient)}
+                  checked={completedIngredients.includes(ingredient)}
+                />
+                {ingredient}
+              </label>
+            </div>
+          ))}
+        </div>
       </div>
 
-      <p data-testid="instructions">{}</p>
-      {copied
-            && <p>Link copied!</p>}
-      <button
-        data-testid="share-btn"
-        onClick={ handleShare }
-      >
-        Compartilhar
-      </button>
 
-      <button onClick={ toggleFavorite }>
-        {favorite ? (
-          <img
-            data-testid="favorite-btn"
-            src={ blackHeartIcon }
-            alt="whiteHeartIcon"
-          />
-        ) : (
-          <img
-            data-testid="favorite-btn"
-            src={ whiteHeartIcon }
-            alt="blackHeartIcon"
-          />
-        )}
-      </button>
+      <h3 className='h3Details'>Instructions:</h3>
+          <p className='p2Details' data-testid="instructions">
+            { trem[0]?.strInstructions.replace(regex, '.\n') }
+          </p>
 
-      <p data-testid="recipe-category">{}</p>
-      <button
-        data-testid="finish-recipe-btn"
-        disabled={ !allIngredientsCompleted }
-        onClick={ HandleClick }
-      >
-        Finalizar Receita
-      </button>
-    </div>
-  );
+          { memoizedRecipeVideo }
+
+      <div className="lastIcons">
+        <button
+          className={`recipe-button btn-hover color-4 lstRecipe ${!allIngredientsCompleted ? 'disabled-button' : ''}`} 
+          data-testid="finish-recipe-btn"
+          disabled={ !allIngredientsCompleted }
+          onClick={ HandleClick }
+        >
+          Finalizar Receita
+        </button>
+
+        <div className="sectionIcons">
+
+          { copied && <span id="linkCopied">Link copied!</span> }
+
+          <img src={ share } alt="share icon" 
+              className="shareIcon"
+              data-testid="share-btn"
+              onClick={ handleShare }
+            />
+
+          <div onClick={ toggleFavorite }>
+            {favorite ? (
+                <div onClick={handleFavoritre} 
+                className="botaoCoracao">
+                  <FontAwesomeIcon
+                    icon={faHeartSolid}
+                    data-testid="favorite-btn"
+                    color="red" 
+                  />
+                </div>
+              ) : (
+                <div onClick={handleFavoritre} className="botaoCoracao">
+                  <FontAwesomeIcon
+                    icon={faHeartRegular}
+                    data-testid="favorite-btn"
+                    color="black"
+                  />
+                </div>
+            )}
+          </div>
+
+        </div>
+
+      </div>
+    
+    </div>);
 }
 
 export default MealsInProgress;

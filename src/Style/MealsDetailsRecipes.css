@@ -1,5 +1,3 @@
-
-
 .containerImgPrincipal{
   width: 100%;
   display: flex;
@@ -29,7 +27,7 @@
   color: #e75516;
   text-transform: uppercase;
   width: 100%;
-  max-width: 150px;
+  max-width: 300px;
   text-align: center;
   margin-left: auto;
   margin-right: auto;
@@ -58,6 +56,7 @@
 
 .h3Details2{
   font-size: 20px;
+  margin-bottom: 5px;
 }
 
 .itensDetails{
@@ -158,16 +157,38 @@
   align-items: center;
 }
 
-.barrinha{
+span.nameDrinkRecommendation {
   color: #e75516;
   text-decoration: none;
   width: 100%;
   font-size: 20px;
-  margin-left: 30px;
+  margin-left: 40px;
+  outline: none;
+  user-select: none;
+}
+
+span.nameDrinkRecommendation:hover {
+  text-decoration: none;
+  color:#9c3c13;
+}
+
+.linkDrinkRecommendation {
+  text-decoration: none;
+}
+
+.containerBarrinha{
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .barrinhaInferior{
-  background-color: aqua;
+  width: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 35px;
+ 
 }
 
 #buttonCoracao{
@@ -176,15 +197,141 @@
 }
 
 .youtubeContainer{
-  width: 100%;
-  height: 180px;
+  height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .youtube {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 350px;
+  box-shadow: 2px 2px 20px black;
+}
+
+.agrupamentoRecommendation{
+  height: 100%;
+  width: 115px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.botaoCoracao{
+  margin-left: 12px;
+}
+
+.shareIcon{
+  width: 18px;
+  height: 18px;
+}
+
+.containerFundo{
   width: 100%;
-  max-width: 399px;
+  height: 20px;
+  display: flex;
+  margin-top: 50px;
+  align-items: center;
+  justify-content: center;
+}
+
+.containerLabel{
+  width: 100%;
+  margin: 20px 0 30px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.label-checkbox{
+ font-family: Arial, Helvetica, sans-serif;
+ width: 350px;
+}
+
+.custom-checkbox-label {
+  display: block;
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.custom-checkbox {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.custom-checkbox::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 12px;
+  height: 12px;
+  border: 1px solid #e75516;
+  border-radius: 3px;
+  background-color: #fff;
+}
+
+.custom-checkbox:checked::before {
+  background-color: #e75516;
+}
+
+input[type="checkbox"] {
+  background-color: transparent;
+  color: transparent;
+  text-decoration: none;
+  appearance: none; 
+}
+
+.custom-checkbox:checked::before::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 7px;
+  width: 5px;
+  height: 10px;
+  border: solid #fff;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+} 
+
+.lastIcons{
+  width: 100%;  
+  margin-left: auto;
+  margin-right: auto;
+  height: 50px;
+  margin-bottom: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.sectionIcons{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 50px;
+  margin-left: 15px;
+}
+
+.disabled-button {
+  opacity: 0.6;
+}
+
+.shareIcon,
+.botaoCoracao {
+  position: relative;
+  z-index: 1; 
+}
+
+#linkCopied { 
+  color: #e75516;
+  position: absolute;
+  right: 32%;
+  z-index: 2;
 }
 

@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import imgDrink from '../../images/alcool.png'
+import imgMeal from '../../images/cutlery.png'
 
 function Footer() {
   return (
@@ -7,7 +9,7 @@ function Footer() {
         <Link to="/drinks">
           <img
             id="alcool"
-            src="src/images/alcool.png"
+            src={ imgDrink }
             alt="icone de bebidas"
             data-testid="drinks-bottom-btn"
           />
@@ -15,7 +17,7 @@ function Footer() {
         <Link to="./meals">
           <img
             id="cutlery"
-            src="src/images/cutlery.png"
+            src={imgMeal}
             alt="icone de comidas"
             data-testid="meals-bottom-btn"
           />
