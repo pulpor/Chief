@@ -48,9 +48,9 @@ function MealsCategorys() {
 
   const handleCategoryClick = (category: string) => {
     if (selectedCategory === category) {
-      setSelectedCategory(null); // Limpa o filtro
+      setSelectedCategory(null); // limpa o filtro
     } else {
-      setSelectedCategory(category); // Aplica o filtro
+      setSelectedCategory(category); // aplica o filtro
     }
   };
 
@@ -98,6 +98,7 @@ function MealsCategorys() {
               textDecoration: 'none', 
               color: 'inherit', 
             }}>
+            
             <div data-testid={ `${index}-recipe-card` } className="cardCategorys">
 
               <img

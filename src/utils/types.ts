@@ -29,8 +29,9 @@ export interface Drink {
   strCategory: string;
   strInstructions: string;
   strDrinkThumb: string;
-  strArea: string,
-  strAlcoholic: string
+  strArea: string;
+  strAlcoholic: string;
+  strYoutube: string;
 
 }
 

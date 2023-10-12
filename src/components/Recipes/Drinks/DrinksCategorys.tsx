@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Drink } from '../../../utils/types';
 import DrinksContext from '../../../context/DrinksContext';
@@ -9,7 +9,6 @@ function DrinksCategorys() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [filteredDrinks, setFilteredDrinks] = useState<Drink[]>([]);
 
-  // Carrega as 5 categorias iniciais
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -25,7 +24,6 @@ function DrinksCategorys() {
     fetchCategories();
   }, []);
 
-  // Filtra as receitas com base na categoria selecionada ou exibe todas as receitas
   useEffect(() => {
     const fetchFilteredDrinks = async () => {
       if (selectedCategory) {
@@ -34,12 +32,11 @@ function DrinksCategorys() {
             `https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${selectedCategory}`,
           );
           const data = await response.json();
-          // se achar a categoria, puxa os 12 primeiros
           setFilteredDrinks(data.drinks.slice(0, 12));
         } catch (error) {
           console.error('Erro de fetching: ', error);
         }
-      } else { // se não puxa os 12 primeiros de geral
+      } else {
         setFilteredDrinks(drinks.slice(0, 12));
       }
     };
@@ -49,9 +46,9 @@ function DrinksCategorys() {
 
   const handleCategoryClick = (category: string) => {
     if (selectedCategory === category) {
-      setSelectedCategory(null); // Limpa o filtro
+      setSelectedCategory(null); // limpa o filtro
     } else {
-      setSelectedCategory(category); // Aplica o filtro
+      setSelectedCategory(category); // aplica o filtro
     }
   };
 
@@ -61,34 +58,68 @@ function DrinksCategorys() {
 
   return (
     <div>
-      <div>
-        <button
-          onClick={ handleClearFilters }
-          data-testid="All-category-filter"
-        >
-          All
-        </button>
-        {categories.map((categoryName) => (
-          <button
-            key={ categoryName.strCategory }
-            data-testid={ `${categoryName.strCategory}-category-filter` }
-            onClick={ () => handleCategoryClick(categoryName.strCategory) }
-          >
-            {categoryName.strCategory}
-          </button>
-        ))}
+
+      <div className="idCategorys">
+        <div className="categorys">
+          <div className="buttons">
+            <button
+              className='btn-hover color-4'
+              onClick={ handleClearFilters }
+              data-testid="All-category-filter"
+            >
+              All
+            </button>
+          </div>
+
+          {categories.map((categoryName) => (
+            <div className="buttons" key={categoryName.strCategory}>
+              <button
+                className='btn-hover color-4'
+                key={ categoryName.strCategory }
+                data-testid={ `${categoryName.strCategory}-category-filter` }
+                onClick={ () => handleCategoryClick(categoryName.strCategory) }
+              >
+                {categoryName.strCategory}
+              </button>
+            </div>
+          ))}
+
+        </div>
       </div>
-      <div>
+
+      <div className="containerCategorys">
         {filteredDrinks.map((drink, index) => (
-          <Link to={ `/drinks/${drink.idDrink}` } key={ drink.idDrink }>
-            <div data-testid={ `${index}-recipe-card` } key={ drink.idDrink }>
-              <h2 data-testid={ `${index}-card-name` }>{drink.strDrink}</h2>
+          <Link 
+            to={ `/drinks/${drink.idDrink}` } 
+            key={ drink.idDrink }
+            style={{
+              textDecoration: 'none', 
+              color: 'inherit', 
+            }}>
+
+          <div 
+            data-testid={ `${index}-recipe-card` } 
+            className="cardCategorys" 
+            key={ drink.idDrink }>
+              
               <img
                 data-testid={ `${index}-card-img` }
                 src={ drink.strDrinkThumb }
                 alt={ drink.strDrink }
+                className="cardImage"
               />
+
+            <div className="containerh2">
+              <h2 
+                data-testid={ `${index}-card-name` }
+                className="cardText"
+                >
+                  {drink.strDrink}
+              </h2>
+
+              
             </div>
+          </div>
           </Link>
         ))}
       </div>

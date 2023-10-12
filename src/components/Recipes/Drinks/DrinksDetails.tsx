@@ -1,21 +1,55 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useMemo } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+
 import DrinksContext from '../../../context/DrinksContext';
-import whiteHeartIcon from '../../../images/whiteHeartIcon.svg';
-import blackHeartIcon from '../../../images/blackHeartIcon.svg';
 import MealsContext from '../../../context/MealsContext';
 
-function DrinkDetails() {
-  const { recipeId } = useParams();
-  const { setRecipeContext, recipeContext, setFavDrinks,
-    favDrinks } = useContext(DrinksContext);
-  const { meals } = useContext(MealsContext);
+import Slider from 'react-slick';
+import "slick-carousel/slick/slick.css";
 
-  const [recipe, setRecipe] = useState<any | null>('');
+import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
+import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import YouTube from 'react-youtube';
+
+import { Drink, Meal } from '../../../utils/types';
+import share from '../../../images/share.png'
+
+
+function RecipeVideo({ strYoutube }: { strYoutube: string }) {
+  if (!strYoutube) {
+    return null;
+  }
+
+  const videoId = strYoutube.split('v=')[1];
+  const options = { 
+    height: '250px',
+    width: '100%'
+  };
+
+  return (
+    <div className="youtubeContainer" data-testid="video">
+      <YouTube className="youtube" videoId={videoId} opts={options} /> 
+    </div>
+  );
+}
+
+function DrinkDetails() {
+  const navigate = useNavigate();
+  const { recipeId } = useParams();
+
+  const { setRecipeContext, 
+          recipeContext, 
+          setFavDrinks,
+          favDrinks 
+        } = useContext(DrinksContext);
+
+  const { meals } = useContext(MealsContext);
+  const [recipe, setRecipe] = useState<Drink | null>(null);
   const [copied, setCopied] = useState(false);
   const [favorite, setFavorite] = useState(false);
 
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRecipeDetails = async () => {
@@ -77,107 +111,172 @@ function DrinkDetails() {
   }, [favDrinks, favorite]);
 
   useEffect(() => {
-    const favorites = JSON.parse(localStorage.getItem('favoriteRecipes') || '[]');
+    const favorites = JSON.parse(localStorage.getItem('favoriteRecipes') ?? '[]');
     setFavDrinks(favorites);
 
-    // Verifique se a receita atual está na lista de favoritos
-    const isFavorite = favorites.some((favRecipe:any) => favRecipe.id === recipe.idDrink);
-    setFavorite(isFavorite);
+    const isFavorite = favorites
+      .some((favRecipe: { id: string }) => recipe && favRecipe.id === recipe.idDrink);
+    
+      setFavorite(isFavorite);
   }, [recipe, setFavDrinks]);
 
+  const settingsSlider = {
+    infinite: true,
+    speed: 500,
+    autoplay: true,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false, 
+  };
+
+  const memoizedRecipeVideo = useMemo(() => {
+    return <RecipeVideo strYoutube={recipe?.strYoutube ?? ''} />;
+  }, [recipe?.strYoutube]);
+
   return (
-    <div>
-      {recipe ? ( // if
-        <div>
+    <div className='containerDetails'>
+      {recipe ? (
+        <div className='containerDetailsNoNull'>
 
-          <img
-            src={ recipe.strDrinkThumb }
-            alt={ recipe.strDrink }
-            data-testid="recipe-photo"
-          />
+          <div className="containerImgPrincipal">
+            <img id="principalDetail"
+              src={ recipe.strDrinkThumb }
+              alt={ recipe.strDrink }
+              data-testid="recipe-photo"
+            />
+          </div>
 
-          {/* passar o title para o meio da imagem dps no css, de acordo c figma */}
-          <h2 data-testid="recipe-title">
+          <h2 className='h2Details' data-testid="recipe-title">
             { recipe.strDrink}
           </h2>
 
-          <p data-testid="recipe-category">
+          <p className='pDetails' data-testid="recipe-category">
             {recipe.strAlcoholic}
           </p>
 
-          <h3>Ingredients:</h3>
+          <h3 className='h3Details'>Ingredients:</h3>
 
-          <div>
+          <div className='itensDetails'>
+
             {Object.keys(recipe)
-              .filter((key) => key.includes('Ingredient')
-              && recipe[key]).map((key, index) => (
-                <div key={ index } data-testid={ `${index}-ingredient-name-and-measure` }>
-                  {recipe[key]}
-                  {' '}
-                  -
-                  {' '}
-                  {/* pega o proximo item da receita */}
-                  {recipe[`strMeasure${index + 1}`]}
-                </div>
-              ))}
+              .filter((key) => key.includes('Ingredient') && recipe[key as keyof Drink])
+                .map((key, index) => (
+                  <div 
+                    className='liDetails'
+                    key={ key } 
+                    data-testid={ `${index}-ingredient-name-and-measure` }
+                  >
+                    <b style={{ color: "#e75517" }}>x</b> {'ㅤ'}
+                    {recipe[key as keyof Drink]}
+                    {' '}
+                    -
+                    {' '}
+                    {recipe[`strMeasure${index + 1}` as keyof Drink]} 
+                  </div>
+                ))}
           </div>
 
-          <h3>Instructions:</h3>
-          <p data-testid="instructions">{recipe.strInstructions}</p>
+          <h3 className='h3Details'>Instructions:</h3>
+          <p className='p2Details' data-testid="instructions">
+            { recipe.strInstructions }
+          </p>
 
-          <div className="carousel-container">
-            {meals.slice(0, 6).map((receita: any, index: any) => (
-              <Link to={ `/meals/${receita.idMeal}` } key={ receita.idMeal }>
-                <div
-                  className="recommendation-card"
-                  data-testid={ `${index}-recommendation-card` }
-                  key={ receita.idMeal }
-                >
-                  <img src={ receita.strMealThumb } alt={ receita.strMeal } />
-                  <p data-testid={ `${index}-recommendation-title` }>{receita.strMeal}</p>
-                </div>
-
-              </Link>
-            ))}
-          </div>
-
+          <div className="containerFundo">
           <button
             data-testid="start-recipe-btn"
-            className="recipe-button"
             onClick={ HandleClick }
+            className={`recipe-button btn-hover color-4 btnRecipe`}
           >
             Continue Recipe
           </button>
-          {copied
-            && <p>Link copied!</p>}
-          <button
-            data-testid="share-btn"
-            onClick={ handleShare }
-          >
-            Share
-          </button>
-          {favorite ? (
-
-            <button onClick={ handleFavoritre }>
-              <img
-                data-testid="favorite-btn"
-                src={ blackHeartIcon }
-                alt="blackHeartIcon"
-              />
-
-            </button>
-          ) : (
-            <button onClick={ handleFavoritre }>
-              <img
-                data-testid="favorite-btn"
-                src={ whiteHeartIcon }
-                alt="whiteHeartIcon"
-              />
-            </button>
-          )}
         </div>
+
+        {memoizedRecipeVideo}
+
+        <h3 className='h3Details2'>
+          Acompanhamento:
+        </h3>
+
+
+        <div className="container">
+          <Slider {...settingsSlider}>
+
+            {meals.slice(0, 6).map((receita: Meal, index: number) => (
+              
+            <>
+              <Link to={`/meals/${receita.idMeal}`} key={receita.idMeal}>
+                
+                <div
+                  className="recommendation-card"
+                  data-testid={`${index}-recommendation-card`}
+                  key={receita.idMeal}
+                  id={String(index)}
+                >
+                  <div className="imagemCarouselContainer">
+                    <img
+                      src={receita.strMealThumb}
+                      alt={receita.strMeal} 
+                      id="sugestao"
+                      className="slide-image" 
+                    />
+                  </div>
+
+                </div>
+
+              </Link>
+
+              <div className="containerBarrinha">
+                <div className="barrinhaInferior">
+
+                  <Link className='linkDrinkRecommendation' to={`/drinks/${receita.idMeal}`} key={receita.idMeal}>
+                    <span
+                        data-testid={`${index}-recommendation-title`}
+                        className='nameDrinkRecommendation'
+                      >
+                        {receita.strMeal}
+                    </span>
+                  </Link>
+
+                    { copied && <p>Link copied!</p> }
+
+                    <div className="agrupamentoRecommendation">
+                      <img src={ share } alt="" 
+                        className="shareIcon"
+                        data-testid="share-btn"
+                        onClick={ handleShare }
+                      />
+
+                      {favorite ? (
+                          <div onClick={ handleFavoritre } 
+                          className="botaoCoracao">
+                            <FontAwesomeIcon
+                              icon={faHeartSolid}
+                              data-testid="favorite-btn"
+                              color="red" 
+                            />
+                          </div>
+                        ) : (
+                          <div onClick={handleFavoritre} className="botaoCoracao">
+                            <FontAwesomeIcon
+                              icon={faHeartRegular}
+                              data-testid="favorite-btn"
+                              color="black"
+                            />
+                          </div>
+                      )}
+                    </div>
+                </div>
+              </div>
+
+            </>
+            ))}
+
+          </Slider>
+        </div>
+
+      </div>
       ) : (null) }
-      ;
+
     </div>
   );
 }

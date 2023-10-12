@@ -4,11 +4,11 @@ import profileIcon from '../../images/pessoa.png';
 import searchIcon from '../../images/lupa.png';
 import SearchBar from './SearchBar';
 import logo from '../../images/logo_head.png';
-import burrito from '../../images/meats/burritos.png';
+import burrito from '../../images/burritos.png';
 
 function Header() {
   const location = useLocation();
-  const showSearchIcon = location.pathname.startsWith('/meals') || location.pathname.startsWith('/drinks');
+  const showSearchIcon = location.pathname.startsWith('/meals') || location.pathname.startsWith('/drinks') || location.pathname.startsWith('/profile');
   const [isSearchVisible, setIsSearchVisible] = useState(false);
 
   const toggleSearch = () => {

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import imgDrink from '../../images/alcool.png'
-import imgMeal from '../../images/cutlery.png'
+import imgMeal from '../../images/meats/burritos.png'
 
 function Footer() {
   return (
@@ -14,7 +14,7 @@ function Footer() {
             data-testid="drinks-bottom-btn"
           />
         </Link>
-        <Link to="./meals">
+        <Link to="/meals">
           <img
             id="cutlery"
             src={imgMeal}

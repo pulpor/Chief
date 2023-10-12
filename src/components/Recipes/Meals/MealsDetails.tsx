@@ -10,9 +10,10 @@ import "slick-carousel/slick/slick.css";
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import YouTube from 'react-youtube';
-import { Drink, Meal } from '../../../utils/types';
 
+import YouTube from 'react-youtube';
+
+import { Drink, Meal } from '../../../utils/types';
 import share from '../../../images/share.png'
 
 
@@ -161,21 +162,21 @@ function MealDetails() {
 
             {Object.keys(recipe)
               .filter((key) => key.includes('Ingredient') && recipe[key as keyof Meal])
-              .map((key, index) => (
-                <div
-                  className='liDetails'
-                  key={key}
-                  data-testid={`${index}-ingredient-name-and-measure`}
-                >
-                  <b style={{ color: "#e75517" }}>x</b>
-                  {'ㅤ'}
-                  {recipe[key as keyof Meal]}
-                  {' '}
-                  -
-                  {' '}
-                  {recipe[`strMeasure${index + 1}` as keyof Meal]} 
-                </div>
-              ))}
+                .map((key, index) => (
+                  <div
+                    className='liDetails'
+                    key={key}
+                    data-testid={`${index}-ingredient-name-and-measure`}
+                  >
+                    <b style={{ color: "#e75517" }}>x</b>
+                    {'ㅤ'}
+                    {recipe[key as keyof Meal]}
+                    {' '}
+                    -
+                    {' '}
+                    {recipe[`strMeasure${index + 1}` as keyof Meal]} 
+                  </div>
+                ))}
 
 
           </div>

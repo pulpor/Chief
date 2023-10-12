@@ -135,22 +135,22 @@ footer{
   grid-template-columns: repeat(2, 1fr);
   align-items: center;
   justify-content: center;
-  margin-bottom: 30px;
+  margin-bottom: 60px;
 }
 
 .cardCategorys{
   height: 230px;
-  display: flex;
+  display: block;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  position: relative;
 }
 
 .cardImage{
-  width: 150px;
+  width: 160px;
   height: auto;
   border-radius: 7%;
+  box-shadow: 1px 1px 10px rgba(103, 31, 0, 0.3);
 }
 
 .containerh2 {
@@ -168,10 +168,15 @@ footer{
   font-family: Arial, Helvetica, sans-serif;
   color: #e75516;
   text-transform: uppercase;
-  position: absolute;
   width: 100%;
   max-width: 150px;
   text-align: center;
+  max-height: 3.6em; /* Duas linhas a 1.8em por linha (ajuste conforme necessário) */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Número de linhas visíveis */
+  -webkit-box-orient: vertical;
+
 }
 
 .cardText:hover{

@@ -82,14 +82,10 @@
   line-height: 20px;
 }
 
-
-
 /* carousel */
-
-
 .container {
   width: 100%;
-  max-width: 350px; /* Defina a largura máxima desejada */
+  max-width: 350px;
   margin: 0 auto;
 }
 

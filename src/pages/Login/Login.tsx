@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import logo from '../../images/logo.png'
 
 export function Login() {
   const [email, setEmail] = useState('');
@@ -32,33 +33,43 @@ export function Login() {
 
   return (
     <div className="containerLogin">
-      <div className="loginInputs">
+
+
+      <form className="loginInputs">
+        
+        <img src={ logo } alt="logo chief" id="logo" className="logo-with-glare"/>
+       
         <input
           data-testid="email-input"
           className="inputLogin"
           type="email"
+          name="email"
           placeholder="email@exemplo.com"
           value={ email }
           onChange={ handleEmailChange }
         />
+
         <input
           data-testid="password-input"
           className="inputLogin"
           type="password"
+          name="password"
           placeholder="Digite sua senha"
           value={ password }
           onChange={ handlePasswordChange }
         />
+
         <button
+          id='loginButton'
           className="buttonLogin"
           data-testid="login-submit-btn"
           disabled={ !isValidEmailValue || !isValidPassword }
           onClick={ handleSubmit }
         >
           Login
-
         </button>
-      </div>
+
+      </form>
     </div>
   );
 }

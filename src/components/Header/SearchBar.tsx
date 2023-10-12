@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-// Api
 import {
   searchRecipesByIngredient,
   searchRecipesByName,
@@ -11,14 +10,11 @@ import {
   searchDrinksByIngredient,
 } from '../../utils/Api';
 
-// tipagem
 import { Drink, Meal } from '../../utils/types';
 import Footer from '../Footer/Footer';
 import DrinksContext from '../../context/DrinksContext';
 import MealsContext from '../../context/MealsContext';
 
-/* onSearch é o callback q manda as informações p
-componente pai (App), p saber oq foi pesquisado */
 function SearchBar() {
   const FIRST_LETTER = 'first-letter';
   const navigate = useNavigate();
@@ -96,11 +92,11 @@ function SearchBar() {
 
     try {
       if (searchType === 'ingredient') {
-        fetchByIngredients();
+        await fetchByIngredients();
       } else if (searchType === 'name') {
-        fetchByName();
+        await fetchByName();
       } else if (searchType === FIRST_LETTER) {
-        fetchByFistLetter();
+        await fetchByFistLetter();
       }
     } catch (error) {
       console.error('Error occurred:', error);
