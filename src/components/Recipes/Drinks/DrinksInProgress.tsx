@@ -1,26 +1,54 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Drink } from '../../../utils/types';
-import whiteHeartIcon from '../../../images/whiteHeartIcon.svg';
-import blackHeartIcon from '../../../images/blackHeartIcon.svg';
+import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
+import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import YouTube from 'react-youtube';
+
+import share from '../../../images/share.png'
+
+function RecipeVideo({ strYoutube }: { strYoutube: string }) {
+  if (!strYoutube) {
+    return null;
+  }
+
+  const videoId = strYoutube.split('v=')[1];
+  const options = { 
+    height: '250px',
+    width: '100%'
+  };
+
+  return (
+    <div className="youtubeContainer" data-testid="video">
+      <YouTube className="youtube" videoId={videoId} opts={options} /> 
+    </div>
+  );
+}
 
 function DrinksInProgress() {
   const { recipeId } = useParams();
   const [trem, setTrem] = useState<Drink[]>([]);
+  console.log(trem);
+  
   const [completedIngredients, setCompletedIngredients] = useState<string[]>([]);
   const [allIngredientsCompleted, setAllIngredientsCompleted] = useState(false);
   const [copied, setCopied] = useState(false);
   const [favorite, setFavorite] = useState(false);
 
-  const getIngredients = (drink: any) => {
-    const ingredients = [];
-    for (let i = 1; i <= 20; i++) { // limite de 20 ingredientes no loop
-      const ingredient = drink && drink[`strIngredient${i}`];
+  const getIngredients = (meal: any) => {
+    const ingredientsSet = new Set();
+  
+    for (let i = 1; i <= 20; i++) {
+      const ingredient = meal && meal[`strIngredient${i}`];
       if (ingredient) {
-        ingredients.push(ingredient);
+        ingredientsSet.add(ingredient);
       }
     }
-    return ingredients;
+  
+    const uniqueIngredients = Array.from(ingredientsSet);  
+    return uniqueIngredients;
   };
 
   useEffect(() => {
@@ -32,7 +60,7 @@ function DrinksInProgress() {
         const data = await response.json();
         setTrem([data.drinks?.[0]]);
       } catch (error) {
-        console.error('deu zebra aqui: ', error);
+        console.error('error: ', error);
       }
     };
 
@@ -61,7 +89,7 @@ function DrinksInProgress() {
   useEffect(() => {
     if (recipeId) {
       const progressData = {
-        ...JSON.parse(localStorage.getItem('inProgressDrinks') || '{}'),
+        ...JSON.parse(localStorage.getItem('inProgressDrinks') ?? '{}'),
         [recipeId]: {
           completedIngredients,
         },
@@ -94,7 +122,7 @@ function DrinksInProgress() {
   };
 
   const toggleFavorite = () => {
-    const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes') || '[]');
+    const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes') ?? '[]');
     const isFavorite = favoriteRecipes
       .some((r: any) => r.id === recipeId && r.type === 'drink');
 
@@ -122,7 +150,12 @@ function DrinksInProgress() {
     setFavorite(!isFavorite);
   };
 
+  const handleFavoritre = () => {
+    setFavorite(!favorite);
+  };
+
   const navigate = useNavigate();
+
   const HandleClick = () => {
     const { idDrink, strAlcoholic, strDrink, strDrinkThumb } = trem[0];
     const completedRecipe = {
@@ -133,74 +166,129 @@ function DrinksInProgress() {
       image: strDrinkThumb,
     };
 
-    const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes')) || [];
+    const storedData = localStorage.getItem('doneRecipes');
+    const doneRecipes = storedData ? JSON.parse(storedData) : [];
+
     doneRecipes.push(completedRecipe);
     localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
     navigate('/done-recipes');
   };
 
+  const regex = /\./g;
+  const strYoutube = trem[0]?.strYoutube ?? '';
+  const memoizedRecipeVideo = useMemo(() => {
+    return <RecipeVideo strYoutube={strYoutube} />;
+  }, [strYoutube]);
+
   return (
     <div>
-      <img data-testid="recipe-photo" alt="foto" />
-      <h1 data-testid="recipe-title">{}</h1>
 
+    {trem[0] ? (
+
+      <>
+        <div className="containerImgPrincipal">
+          <img 
+            data-testid="recipe-photo" 
+            alt="foto"
+            id="principalDetail"
+            src={trem[0].strDrinkThumb || ''} 
+          />
+        </div>
+
+        <h2 className='h2Details' data-testid="recipe-title">
+          {trem[0].strDrink}
+        </h2> 
+
+        <p className='pDetails' data-testid="recipe-category">
+            { trem[0].strCategory }
+        </p>
+      </>
+     
+    ) : (
+      <p>Loading...</p>
+    )}  
+
+    <div className="containerLabel">
       <div className="label-checkbox">
         {getIngredients(trem[0]).map((ingredient, index) => (
           <div key={ index }>
             <label
               data-testid={ `${index}-ingredient-step` }
-              style={ {
-                textDecoration: completedIngredients
-                  .includes(ingredient) ? 'line-through solid rgb(0, 0, 0)' : 'none',
-              } }
+              htmlFor={`checkbox-${index}`}
+              className="custom-checkbox-label"
             >
-              <input
+
+            <input
+                className="custom-checkbox"
                 type="checkbox"
-                value={ ingredient }
-                onClick={ () => handleIngredientClick(ingredient) }
-                checked={ completedIngredients.includes(ingredient) }
+                id={`checkbox-${index}`}
+                value={ingredient}
+                onClick={() => handleIngredientClick(ingredient)}
+                checked={completedIngredients.includes(ingredient)}
               />
+
               {ingredient}
             </label>
           </div>
         ))}
       </div>
-
-      <p data-testid="instructions">{}</p>
-      {copied && <p>Link copied!</p>}
-      <button
-        data-testid="share-btn"
-        onClick={ handleShare }
-      >
-        Compartilhar
-      </button>
-
-      <button onClick={ toggleFavorite }>
-        {favorite ? (
-          <img
-            data-testid="favorite-btn"
-            src={ blackHeartIcon }
-            alt="whiteHeartIcon"
-          />
-        ) : (
-          <img
-            data-testid="favorite-btn"
-            src={ whiteHeartIcon }
-            alt="blackHeartIcon"
-          />
-        )}
-      </button>
-
-      <p data-testid="recipe-category">{}</p>
-      <button
-        data-testid="finish-recipe-btn"
-        disabled={ !allIngredientsCompleted }
-        onClick={ HandleClick }
-      >
-        Finalizar Receita
-      </button>
     </div>
-  );
+
+    <h3 className='h3Details'>Instructions:</h3>
+          <p className='p2Details' data-testid="instructions">
+            { trem[0]?.strInstructions.replace(regex, '.\n') }
+          </p>
+
+          { memoizedRecipeVideo }
+
+
+      <div className="lastIcons">
+        <button
+          className={`recipe-button btn-hover color-4 lstRecipe ${!allIngredientsCompleted ? 'disabled-button' : ''}`} 
+          data-testid="finish-recipe-btn"
+          disabled={ !allIngredientsCompleted }
+          onClick={ HandleClick }
+        >
+          Finalizar Receita
+        </button>
+
+        <div className="sectionIcons">
+
+          { copied && <span className="linkCopied">Link copied!</span> }
+
+          <img src={ share } alt="share icon" 
+              className="shareIcon"
+              data-testid="share-btn"
+              onClick={ handleShare }
+            />
+
+          <div onClick={ toggleFavorite }>
+            {favorite ? (
+                <div onClick={ handleFavoritre } 
+                className="botaoCoracao">
+                  <FontAwesomeIcon
+                    icon={faHeartSolid}
+                    data-testid="favorite-btn"
+                    color="red" 
+                  />
+                </div>
+              ) : (
+                <div onClick={ handleFavoritre } className="botaoCoracao">
+                  <FontAwesomeIcon
+                    icon={faHeartRegular}
+                    data-testid="favorite-btn"
+                    color="black"
+                  />
+                </div>
+            )}
+          </div>
+
+        </div>
+
+      </div>
+    
+    </div>);
 }
+
 
 export default DrinksInProgress;

@@ -3,6 +3,13 @@ import { Link } from 'react-router-dom';
 import MealsContext from '../../../context/MealsContext';
 import { Meal } from '../../../utils/types';
 
+import all from "../../../images/meat/all.svg"
+import Beef from "../../../images/meat/beef.svg";
+import Chicken from "../../../images/meat/chicken.svg";
+import Breakfast from "../../../images/meat/breakfast.svg";
+import Dessert from "../../../images/meat/dessert.svg";
+import Goat from "../../../images/meat/goat.svg";
+
 function MealsCategorys() {
   const { meals } = useContext(MealsContext);
   const [categories, setCategories] = useState<Meal[]>([]);
@@ -58,6 +65,14 @@ function MealsCategorys() {
     setSelectedCategory(null);
   };
 
+  const categoryImageMap: Record<string, string> = {
+    Beef,
+    Chicken,
+    Breakfast,
+    Dessert,
+    Goat,
+  };
+
   return (
     <div>
 
@@ -65,27 +80,30 @@ function MealsCategorys() {
         <div className="categorys">
           <div className="buttons">
             <button
-              className='btn-hover color-4'
+              
               onClick={ handleClearFilters }
               data-testid="All-category-filter"
             >
-              All
+              <img src={ all } title="All"/>
             </button>
           </div>
 
           {categories.map((categoryName) => (
-            <div className="buttons" key={categoryName.strCategory}>
-              <button
-                className='btn-hover color-4'
-                data-testid={`${categoryName.strCategory}-category-filter`}
-                onClick={() => handleCategoryClick(categoryName.strCategory)}
-              >
-                {categoryName.strCategory}
-              </button>
-            </div>
-          ))}
-
-          
+          <div className="buttons" key={categoryName.strCategory}>
+            <button
+              data-testid={`${categoryName.strCategory}-category-filter`}
+              onClick={() => handleCategoryClick(categoryName.strCategory)}
+            >
+              {categoryImageMap[categoryName.strCategory] && (
+              <img
+                src={categoryImageMap[categoryName.strCategory]}
+                alt={categoryName.strCategory}
+                title={categoryName.strCategory}
+              />
+            )}            
+            </button>            
+          </div>
+        ))}
         </div>
       </div>
 
@@ -95,8 +113,7 @@ function MealsCategorys() {
             to={ `/meals/${meal.idMeal}` } 
             key={ meal.idMeal }
             style={{
-              textDecoration: 'none', 
-              color: 'inherit', 
+              textDecoration: 'none',
             }}>
             
             <div data-testid={ `${index}-recipe-card` } className="cardCategorys">

@@ -26,11 +26,11 @@ function RecipeVideo({ strYoutube }: { strYoutube: string }) {
   );
 }
 
-
-
 function MealsInProgress() {
   const { recipeId } = useParams();
   const [trem, setTrem] = useState<Meal[]>([]);
+  console.log(trem);
+  
   const [completedIngredients, setCompletedIngredients] = useState<string[]>([]);
   const [allIngredientsCompleted, setAllIngredientsCompleted] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -60,7 +60,7 @@ function MealsInProgress() {
         const data = await response.json();
         setTrem([data.meals?.[0]]);
       } catch (error) {
-        console.error('deu zebra aqui: ', error);
+        console.error('error: ', error);
       }
     };
 
@@ -89,7 +89,7 @@ function MealsInProgress() {
   useEffect(() => {
     if (recipeId) {
       const progressData = {
-        ...JSON.parse(localStorage.getItem('inProgressRecipes') || '{}'),
+        ...JSON.parse(localStorage.getItem('inProgressRecipes') ?? '{}'),
         [recipeId]: {
           completedIngredients,
         },
@@ -122,7 +122,7 @@ function MealsInProgress() {
   };
 
   const toggleFavorite = () => {
-    const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes') || '[]');
+    const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes') ?? '[]');
     const isFavorite = favoriteRecipes
       .some((r: any) => r.id === recipeId && r.type === 'meal');
 
@@ -154,9 +154,9 @@ function MealsInProgress() {
   const regex = /\./g;
 
   const HandleClick = () => {
+    const { idMeal, strCategory, strMeal, strMealThumb, strArea } = trem[0];
     const storedData = localStorage.getItem('doneRecipes');
     const doneRecipes = storedData ? JSON.parse(storedData) : [];
-    const { idMeal, strCategory, strMeal, strMealThumb, strArea } = trem[0];
     const completedRecipe = {
       id: idMeal,
       type: 'meal',
@@ -207,7 +207,7 @@ function MealsInProgress() {
         </>
        
       ) : (
-        <p>Carregando...</p>
+        <p>Loading...</p>
       )}      
 
       <div className="containerLabel">
@@ -254,7 +254,7 @@ function MealsInProgress() {
 
         <div className="sectionIcons">
 
-          { copied && <span id="linkCopied">Link copied!</span> }
+          { copied && <span className="linkCopied">Link copied!</span> }
 
           <img src={ share } alt="share icon" 
               className="shareIcon"

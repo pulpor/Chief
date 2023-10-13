@@ -24,7 +24,6 @@ function SearchBar() {
   const [searchType, setSearchType] = useState('ingredient');
   const [isDrink, setIsDrink] = useState<Drink[]>([]);
   const [isMeal, setIsMeal] = useState<Meal[]>([]);
-  console.log(isMeal);
 
   const isDrinksPage = location.pathname === '/drinks';
   const isMealsPage = location.pathname === '/meals';
@@ -171,7 +170,7 @@ function SearchBar() {
 
       </div>
 
-      <button data-testid="exec-search-btn" className='btn-hover color-4' onClick={ HandleSearch }>
+      <button data-testid="exec-search-btn" className='btn-hover searchBtn' onClick={ HandleSearch }>
         Search
       </button>
 

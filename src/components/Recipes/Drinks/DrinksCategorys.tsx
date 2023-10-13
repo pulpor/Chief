@@ -3,6 +3,13 @@ import { Link } from 'react-router-dom';
 import { Drink } from '../../../utils/types';
 import DrinksContext from '../../../context/DrinksContext';
 
+import all from "../../../images/drink/all.svg"
+import Cocktail from "../../../images/drink/cocktail.svg"
+import Cocoa from "../../../images/drink/cocoa.svg"
+import Ordinary from "../../../images/drink/ordinary.svg"
+import Other from "../../../images/drink/other.svg"
+import Shake from "../../../images/drink/shake.svg"
+
 function DrinksCategorys() {
   const { drinks } = useContext(DrinksContext);
   const [categories, setCategories] = useState<Drink[]>([]);
@@ -56,6 +63,15 @@ function DrinksCategorys() {
     setSelectedCategory(null);
   };
 
+  const categoryImageMap: Record<string, string> = {
+    "Ordinary Drink": Ordinary,
+    "Cocktail": Cocktail,
+    "Shake": Shake,
+    "Other / Unknown": Other,
+    "Cocoa": Cocoa,
+  };
+  
+
   return (
     <div>
 
@@ -63,23 +79,27 @@ function DrinksCategorys() {
         <div className="categorys">
           <div className="buttons">
             <button
-              className='btn-hover color-4'
               onClick={ handleClearFilters }
               data-testid="All-category-filter"
             >
-              All
+              <img src={ all } title="All"/>
             </button>
           </div>
 
           {categories.map((categoryName) => (
             <div className="buttons" key={categoryName.strCategory}>
               <button
-                className='btn-hover color-4'
-                key={ categoryName.strCategory }
                 data-testid={ `${categoryName.strCategory}-category-filter` }
                 onClick={ () => handleCategoryClick(categoryName.strCategory) }
               >
-                {categoryName.strCategory}
+                {categoryImageMap[categoryName.strCategory] && (
+                <img
+                  src={categoryImageMap[categoryName.strCategory]}
+                  alt={categoryName.strCategory}
+                  title={categoryName.strCategory}
+                />
+              )}  
+                
               </button>
             </div>
           ))}
@@ -116,10 +136,10 @@ function DrinksCategorys() {
                 >
                   {drink.strDrink}
               </h2>
-
-              
             </div>
+
           </div>
+          
           </Link>
         ))}
       </div>

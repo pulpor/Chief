@@ -71,7 +71,7 @@ export type FavoriteAndDoneRecipes = {
   name: string,
   image:string,
   doneDate: string,
-  tags: string,
+  tags: string[],
 };
 
 export interface CardProps {

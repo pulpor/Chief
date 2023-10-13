@@ -237,7 +237,7 @@ function DrinkDetails() {
                     </span>
                   </Link>
 
-                    { copied && <p>Link copied!</p> }
+                    { copied && <span className="linkCopied">Link copied!</span> }
 
                     <div className="agrupamentoRecommendation">
                       <img src={ share } alt="" 

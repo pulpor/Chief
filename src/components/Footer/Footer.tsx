@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import imgDrink from '../../images/alcool.png'
-import imgMeal from '../../images/meats/burritos.png'
+import imgMeal from '../../images/burritos.png'
 
 function Footer() {
   return (

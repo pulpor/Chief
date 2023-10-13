@@ -1,19 +1,29 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import profileIcon from '../../images/pessoa.png';
 import searchIcon from '../../images/lupa.png';
 import SearchBar from './SearchBar';
 import logo from '../../images/logo_head.png';
+
 import burrito from '../../images/burritos.png';
+import alcool from '../../images/alcool.png';
 
 function Header() {
   const location = useLocation();
-  const showSearchIcon = location.pathname.startsWith('/meals') || location.pathname.startsWith('/drinks') || location.pathname.startsWith('/profile');
-  const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const showSearchIcon = location.pathname.startsWith('/meals') || location.pathname.startsWith('/drinks');
+  const [isSearchVisible, setIsSearchVisible] = useState(location.pathname === '/meals' || location.pathname === '/drinks');
 
   const toggleSearch = () => {
     setIsSearchVisible(!isSearchVisible);
   };
+
+  useEffect(() => {
+    if (location.pathname === '/meals' || location.pathname === '/drinks') {
+      setIsSearchVisible(true);
+    } else {
+      setIsSearchVisible(false);
+    }
+  }, [location.pathname]);
 
   const getTitle = () => {
     switch (location.pathname) {
@@ -65,10 +75,19 @@ function Header() {
         </div>
       </div>
       
-       {window.location.pathname === '/meals' && (
+        {window.location.pathname === '/meals' && (
           <div className="logoContainerHeader">
           
               <img src={burrito} id="burrito" alt="burrito's logo" />
+          
+            <h1 className='page-title' data-testid="page-title">{getTitle()}</h1>
+          </div> 
+        )}
+
+        {window.location.pathname === '/drinks' && (
+          <div className="logoContainerHeader">
+          
+              <img src={alcool} id="burrito" alt="drink's logo" />
           
             <h1 className='page-title' data-testid="page-title">{getTitle()}</h1>
           </div> 
