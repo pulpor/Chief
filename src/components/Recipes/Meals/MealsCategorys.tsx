@@ -15,6 +15,19 @@ function MealsCategorys() {
   const [categories, setCategories] = useState<Meal[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [filteredMeals, setFilteredMeals] = useState<Meal[]>([]);
+  
+  const itemsPerPage = 12;
+  const [startIndex, setStartIndex] = useState(1)
+  
+  const handleButtonClick = () => {
+    setStartIndex(startIndex + itemsPerPage)
+  }
+
+  const handleButtonClick2 = () => {
+    if (startIndex > 12) {
+      setStartIndex(startIndex - itemsPerPage);
+    }
+  }
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -40,13 +53,12 @@ function MealsCategorys() {
             `https://www.themealdb.com/api/json/v1/1/filter.php?c=${selectedCategory}`,
           );
           const data = await response.json();
-          console.log('data', data);
-          setFilteredMeals(data.meals.slice(0, 12));
+          setFilteredMeals(data.meals);
         } catch (error) {
           console.error('Erro de fetching: ', error);
         }
       } else {
-        setFilteredMeals(meals.slice(0, 12));
+        setFilteredMeals(meals);
       }
     };
 
@@ -108,7 +120,7 @@ function MealsCategorys() {
       </div>
 
       <div className="containerCategorys">
-        {filteredMeals.map((meal, index) => (
+      {filteredMeals.slice(startIndex, startIndex + itemsPerPage).map((meal, index) => (
           <Link 
             to={ `/meals/${meal.idMeal}` } 
             key={ meal.idMeal }
@@ -139,6 +151,27 @@ function MealsCategorys() {
           </Link>
         ))}
       </div>
+
+      <div className="containerButtonCategorys">
+
+        <button
+          onClick={handleButtonClick2}
+          data-testid="see-previous-button"
+          className="recipe-button btn-hover color-4 btnRecipe"
+          style={{ opacity: startIndex <= 12 ? 0.6 : 1 }}
+        >
+          Previous
+        </button>
+
+        <button 
+          onClick={handleButtonClick}
+          data-testid="see-more-button"
+          className={`recipe-button btn-hover color-4 btnRecipe`}
+          >
+          Next
+        </button>
+      </div>
+
     </div>
   );
 }

@@ -25,6 +25,19 @@ function DoneRecipes() {
     }
   }, [filter]);
 
+  const formated = (index: any) => {
+    const finishRecipeDates = JSON.parse(localStorage.getItem('finishRecipeDates') || '[]') || [];
+    const finishRecipeTimes = JSON.parse(localStorage.getItem('finishRecipeTimes') || '[]') || [];
+  
+    if (index >= 0 && index < finishRecipeDates.length && index < finishRecipeTimes.length) {
+      const finishRecipe = `${finishRecipeDates[index]} - ${finishRecipeTimes[index]}`;
+      return finishRecipe;
+    }
+  
+    return '';
+  };
+  
+
   const filterRecipes = (
     recipes: FavoriteAndDoneRecipes[],
     selectedFilter: string | null,
@@ -62,13 +75,21 @@ function DoneRecipes() {
   return (
     <>
       <div className="containerDone">
+        
+        <button
+          data-testid="filter-by-all-btn"
+          id="AllButtonRecipe"
+          onClick={ clearFilter }
+        >
+          <img src={ all } title="All"/>
+        </button>
 
         <button
           data-testid="filter-by-meal-btn"
           id="MealButtonRecipe"
           onClick={ filterMeals }
         >
-          <img src={ meal }/>
+          <img src={ meal } title="Meals"/>
         </button>
 
         <button
@@ -76,16 +97,10 @@ function DoneRecipes() {
           id="DrinksButtonRecipe"
           onClick={ filterDrinks }
         >
-          <img src={ drink }/>
+          <img src={ drink } title="Drinks"/>
         </button>
       
-        <button
-          data-testid="filter-by-all-btn"
-          id="AllButtonRecipe"
-          onClick={ clearFilter }
-        >
-          <img src={ all }/>
-        </button>
+        
       </div>
 
       {doneRecipes.map((recipe, index) => {
@@ -133,49 +148,37 @@ function DoneRecipes() {
                 </Link>               
 
                 <p className='pDetails' data-testid={ `${index}-horizontal-top-text` }>
-                  {`${recipe.nationality} - ${recipe.category}`}
+                  {`${recipe.nationality || recipe.name } - ${recipe.category || recipe.alcoholicOrNot}`}
                 </p>
 
                 <div className="containerFinal">
 
+                  <p className="pDetails2" data-testid={ `${index}-horizontal-done-date` }>
+                    <span id="done">Done on:</span> {formated(index)}
+                  </p>
 
+                  {recipe.tags && Array.isArray(recipe.tags) && recipe.tags
+                    .slice(0, 2).map((tag: any, tagIndex: any) => (
+                      <p
+                        key={ `${index}-${tagIndex}` }
+                        data-testid={ `${index}-${tag}-horizontal-tag` }
+                      >
+                        {tag}
+                      </p>
+                    ))}
 
+                  <button onClick={ () => handleShareClick() }>
 
-                <p className="pDetails2" data-testid={ `${index}-horizontal-done-date` }>
-                  Done on: {recipe.doneDate !== null ? recipe.doneDate : ''}
-                </p>
+                    <img
+                      className="shareIcon"
+                      src={ shareIcon }
+                      alt="Share"
+                      data-testid={ `${index}-horizontal-share-btn` }
+                    />
 
+                  </button>
 
-
-
-                <p data-testid={ `${index}-horizontal-top-text` }>
-                  {recipe.alcoholicOrNot}
-                </p>
-
-
-                {recipe.tags && Array.isArray(recipe.tags) && recipe.tags
-                  .slice(0, 2).map((tag: any, tagIndex: any) => (
-                    <p
-                      key={ `${index}-${tagIndex}` }
-                      data-testid={ `${index}-${tag}-horizontal-tag` }
-                    >
-                      {tag}
-                    </p>
-                  ))}
-
-                <button onClick={ () => handleShareClick() }>
-
-                  
-                  <img
-                    className="shareIcon"
-                    src={ shareIcon }
-                    alt="Share"
-                    data-testid={ `${index}-horizontal-share-btn` }
-                  />
-
-                </button>
-                {copy && <span id="linkCopied">Link copied!</span>}
-
+                  {copy && <span className="linkCopied">Link copied!</span>}
 
                 </div>
                 {' '}

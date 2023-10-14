@@ -16,6 +16,21 @@ function DrinksCategorys() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [filteredDrinks, setFilteredDrinks] = useState<Drink[]>([]);
 
+  const itemsPerPage = 12;
+  const [startIndex, setStartIndex] = useState(1)
+  
+  const handleButtonClick = () => {
+    setStartIndex(startIndex + itemsPerPage)
+  }
+
+  const handleButtonClick2 = () => {
+    if (startIndex > 12) {
+      setStartIndex(startIndex - itemsPerPage);
+    }
+  }
+  
+
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -39,12 +54,12 @@ function DrinksCategorys() {
             `https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${selectedCategory}`,
           );
           const data = await response.json();
-          setFilteredDrinks(data.drinks.slice(0, 12));
+          setFilteredDrinks(data.drinks);
         } catch (error) {
           console.error('Erro de fetching: ', error);
         }
       } else {
-        setFilteredDrinks(drinks.slice(0, 12));
+        setFilteredDrinks(drinks);
       }
     };
 
@@ -108,7 +123,7 @@ function DrinksCategorys() {
       </div>
 
       <div className="containerCategorys">
-        {filteredDrinks.map((drink, index) => (
+         {filteredDrinks.slice(startIndex, startIndex + itemsPerPage).map((drink, index) => (
           <Link 
             to={ `/drinks/${drink.idDrink}` } 
             key={ drink.idDrink }
@@ -143,6 +158,29 @@ function DrinksCategorys() {
           </Link>
         ))}
       </div>
+
+       <div className="containerButtonCategorys">
+       <button
+          onClick={handleButtonClick2}
+          data-testid="see-previous-button"
+          className="recipe-button btn-hover color-4 btnRecipe"
+          style={{ opacity: startIndex <= 12 ? 0.6 : 1 }}
+        >
+          Previous
+        </button>
+
+
+        <button 
+          onClick={handleButtonClick}
+          data-testid="see-more-button"
+          className={`recipe-button btn-hover color-4 btnRecipe`}
+          >
+          Next
+        </button>
+
+
+      </div>
+
     </div>
   );
 }

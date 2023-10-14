@@ -7,9 +7,8 @@ import MealsContext from '../../../context/MealsContext';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 
-import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
-import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import aberto from '../../../images/coracaoAberto.png'
+import fechado from '../../../images/coracaoFechado.png'
 
 import YouTube from 'react-youtube';
 
@@ -90,13 +89,13 @@ function DrinkDetails() {
     }
   }, [favorite, recipeContext, setFavDrinks]);
 
-  const handleFavoritre = () => {
+  const handleFavorite = () => {
     setFavorite(!favorite);
   };
 
   useEffect(() => {
     if (favorite) {
-      localStorage.setItem('favoriteRecipes', JSON.stringify(favDrinks.map((r) => {
+      const favoriteDrinks = favDrinks.map((r) => {
         return {
           id: r.idDrink,
           type: 'drink',
@@ -106,7 +105,8 @@ function DrinkDetails() {
           name: r.strDrink,
           image: r.strDrinkThumb,
         };
-      })));
+      });
+      localStorage.setItem('favoriteRecipes', JSON.stringify(favoriteDrinks));
     }
   }, [favDrinks, favorite]);
 
@@ -114,10 +114,8 @@ function DrinkDetails() {
     const favorites = JSON.parse(localStorage.getItem('favoriteRecipes') ?? '[]');
     setFavDrinks(favorites);
 
-    const isFavorite = favorites
-      .some((favRecipe: { id: string }) => recipe && favRecipe.id === recipe.idDrink);
-    
-      setFavorite(isFavorite);
+    const isFavorite = favorites.some((favRecipe: { id: string; }) => recipe && favRecipe.id === recipe.idDrink);
+    setFavorite(isFavorite);
   }, [recipe, setFavDrinks]);
 
   const settingsSlider = {
@@ -247,22 +245,19 @@ function DrinkDetails() {
                       />
 
                       {favorite ? (
-                          <div onClick={ handleFavoritre } 
-                          className="botaoCoracao">
-                            <FontAwesomeIcon
-                              icon={faHeartSolid}
-                              data-testid="favorite-btn"
-                              color="red" 
-                            />
-                          </div>
-                        ) : (
-                          <div onClick={handleFavoritre} className="botaoCoracao">
-                            <FontAwesomeIcon
-                              icon={faHeartRegular}
-                              data-testid="favorite-btn"
-                              color="black"
-                            />
-                          </div>
+                        <div onClick={handleFavorite} className="botaoCoracao">
+                          <img 
+                          src={aberto} 
+                          alt="coração aberto"
+                          id="abertoCoracao"/>
+                        </div>
+                      ) : (
+                        <div onClick={handleFavorite} className="botaoCoracao">
+                          <img 
+                          src={fechado} 
+                          alt="coração fechado"
+                          id="fechadoCoracao"/>
+                        </div>
                       )}
                     </div>
                 </div>

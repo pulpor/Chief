@@ -1,15 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import Header from '../Header/Header';
 import { FavoriteAndDoneRecipes } from '../../utils/types';
 
-import shareIcon from '../../images/share.png';
-import blackHeart from '../../images/blackHeartIcon.svg';
+import all from '../../images/all_all.svg';
+import meal from '../../images/meat/all.svg';
+import drink from '../../images/drink/all.svg';
+
+
+import aberto from '../../images/coracaoAberto.png'
+import fechado from '../../images/coracaoFechado.png'
+
 
 function FavoriteRecipes() {
   const [favorites, setFavorites] = useState<FavoriteAndDoneRecipes[]>([]);
-  const [filter, setFilter] = useState<string>('');
+  const [filter, setFilter] = useState<any | null>(null);
   const [copy, setCopy] = useState('');
 
 
@@ -24,7 +29,6 @@ function FavoriteRecipes() {
 
   const handleLinkCopy = (recipe: FavoriteAndDoneRecipes) => {
     const newLink = `${window.location.origin}/${recipe.type}s/${recipe.id}`;
-    // clipboard vai copiar p "area de transferencia"
     navigator.clipboard.writeText(newLink).then(() => {
       setCopy(recipe.id);
     });
@@ -35,32 +39,51 @@ function FavoriteRecipes() {
       .getItem('favoriteRecipes') || '[]') as FavoriteAndDoneRecipes[]);
   }, []);
 
+
+  const filterMeals = () => {
+    setFilter('meal');
+  };
+
+  const filterDrinks = () => {
+    setFilter('drink');
+  };
+
+  const clearFilter = () => {
+    setFilter(null);
+  };
+
   return (
     <>
 
-      <div className="HeaderFavoriteButton">
-        <Header />
-
+      <div className="containerDone">
+        
         <button
           data-testid="filter-by-all-btn"
-          onClick={ () => setFilter('') }
+          id="AllButtonRecipe"
+          onClick={ clearFilter }
         >
-          All
+          <img src={ all } title="All"/>
         </button>
+
         <button
           data-testid="filter-by-meal-btn"
-          onClick={ () => setFilter('meal') }
+          id="MealButtonRecipe"
+          onClick={ filterMeals }
         >
-          Meals
+          <img src={ meal } title="Meals"/>
         </button>
+
         <button
           data-testid="filter-by-drink-btn"
-          onClick={ () => setFilter('drink') }
+          id="DrinksButtonRecipe"
+          onClick={ filterDrinks }
         >
-          Drinks
+          <img src={ drink } title="Drinks"/>
         </button>
+      
       </div>
 
+      
       {favorites.filter((recipe) => (
         filter === 'meal' && recipe.type === 'meal')
         || (filter === 'drink' && recipe.type === 'drink') || filter === '')
@@ -86,13 +109,12 @@ function FavoriteRecipes() {
             </div>
 
             <div>
-              {/* link copied ou nada  */}
               { copy === recipe.id ? <p>Link copied!</p> : null }
 
               <button onClick={ () => handleLinkCopy(recipe) }>
                 <img
                   data-testid={ `${index}-horizontal-share-btn` }
-                  src={ shareIcon }
+                  src={ aberto }
                   alt="shareIcon"
                 />
               </button>
@@ -100,7 +122,7 @@ function FavoriteRecipes() {
               <button onClick={ () => handleFavorite(recipe) }>
                 <img
                   data-testid={ `${index}-horizontal-favorite-btn` }
-                  src={ blackHeart }
+                  src={ fechado }
                   alt="blackHeart"
                 />
               </button>

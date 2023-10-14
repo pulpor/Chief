@@ -16,12 +16,12 @@ import DrinksContext from '../../context/DrinksContext';
 import MealsContext from '../../context/MealsContext';
 
 function SearchBar() {
-  const FIRST_LETTER = 'first-letter';
   const navigate = useNavigate();
   const location = useLocation();
 
   const [myQuery, setMyQuery] = useState('');
   const [searchType, setSearchType] = useState('ingredient');
+  
   const [isDrink, setIsDrink] = useState<Drink[]>([]);
   const [isMeal, setIsMeal] = useState<Meal[]>([]);
 
@@ -42,18 +42,24 @@ function SearchBar() {
   }, [isDrink, isMeal, navigate]);
 
   const fetchByFistLetter = async () => {
-    if (isDrinksPage) {
-      const recipes = await searchDrinksByFirstLetter(myQuery);
-      setIsDrink(recipes);
-      setDrinks(recipes);
-    } else if (isMealsPage) {
-      const recipes = await searchRecipesByFirstLetter(myQuery);
-      setIsMeal(recipes);
-      setMeals(recipes);
+    try {
+      console.log('Fetching by first letter:', myQuery);
+      if (isDrinksPage) {
+        const recipes = await searchDrinksByFirstLetter(myQuery);
+        setIsDrink(recipes);
+        setDrinks(recipes);
+      } else if (isMealsPage) {
+        const recipes = await searchRecipesByFirstLetter(myQuery);
+        setIsMeal(recipes);
+        setMeals(recipes);
+      }
+    } catch (error) {
+      console.error('Error fetching by first letter:', error);
     }
   };
 
   const fetchByName = async () => {
+    console.log('Fetching by name:', myQuery);
     if (isDrinksPage) {
       const recipes = await searchDrinksByName(myQuery);
       setIsDrink(recipes);
@@ -66,42 +72,42 @@ function SearchBar() {
   };
 
   const fetchByIngredients = async () => {
+
     if (isDrinksPage) {
       const recipes = await searchDrinksByIngredient(myQuery);
-      console.log(('fetchByIngredientsChamado2'));
       setIsDrink(recipes);
       setDrinks(recipes);
     } else if (isMealsPage) {
       const recipes = await searchRecipesByIngredient(myQuery);
-
       setIsMeal(recipes);
       setMeals(recipes);
     }
   };
 
   const HandleSearch = async () => {
-    if (searchType === FIRST_LETTER && myQuery.length !== 1) {
+    if (searchType === 'first-letter' && myQuery.length !== 1) {
       window.alert('Your search must have only 1 (one) character');
       return;
     }
-
-    if (isMeal.length === 0 || isDrink.length === 0) {
-      window.alert('Sorry, we havent found any recipes for these filters');
-    }
-
-    try {
-      if (searchType === 'ingredient') {
-        await fetchByIngredients();
-      } else if (searchType === 'name') {
-        await fetchByName();
-      } else if (searchType === FIRST_LETTER) {
-        await fetchByFistLetter();
+  
+    if (searchType === 'ingredient') {
+      await fetchByIngredients();
+      if ((location.pathname === '/meals' && isMeal.length === 0) || (location.pathname === '/drinks' && isDrink.length === 0)) {
+        window.alert('No recipes were found for these filters');
       }
-    } catch (error) {
-      console.error('Error occurred:', error);
+    } else if (searchType === 'name') {
+      await fetchByName();
+      if ((location.pathname === '/meals' && isMeal.length === 0) || (location.pathname === '/drinks' && isDrink.length === 0)) {
+        window.alert('No recipes were found for these filters');
+      }
+    } else if (searchType === 'first-letter') {
+      await fetchByFistLetter();
+      if ((location.pathname === '/meals' && isMeal.length === 0) || (location.pathname === '/drinks' && isDrink.length === 0)) {
+        window.alert('No recipes were found for these filters');
+      }
     }
-  };
-
+  }
+  
   return (
     <div className='searchContainer'>
 
@@ -157,9 +163,9 @@ function SearchBar() {
               id="radio3"
               data-testid="first-letter-search-radio"
               type="radio"
-              value={ FIRST_LETTER }
-              checked={ searchType === FIRST_LETTER }
-              onChange={ () => setSearchType(FIRST_LETTER) }
+              value={ 'first-letter' }
+              checked={ searchType === 'first-letter' }
+              onChange={ () => setSearchType('first-letter') }
             />
             <div className="custom-radio">
               <span></span>
@@ -170,7 +176,10 @@ function SearchBar() {
 
       </div>
 
-      <button data-testid="exec-search-btn" className='btn-hover searchBtn' onClick={ HandleSearch }>
+      <button 
+        data-testid="exec-search-btn" 
+        className='btn-hover searchBtn' 
+        onClick={ HandleSearch }>
         Search
       </button>
 

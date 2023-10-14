@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Meal } from '../../../utils/types';
-import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
-import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import YouTube from 'react-youtube';
 
+import aberto from '../../../images/coracaoAberto.png'
+import fechado from '../../../images/coracaoFechado.png'
+
+import YouTube from 'react-youtube';
 import share from '../../../images/share.png'
 
 function RecipeVideo({ strYoutube }: { strYoutube: string }) {
@@ -155,8 +155,10 @@ function MealsInProgress() {
 
   const HandleClick = () => {
     const { idMeal, strCategory, strMeal, strMealThumb, strArea } = trem[0];
+
     const storedData = localStorage.getItem('doneRecipes');
     const doneRecipes = storedData ? JSON.parse(storedData) : [];
+
     const completedRecipe = {
       id: idMeal,
       type: 'meal',
@@ -166,8 +168,25 @@ function MealsInProgress() {
       name: strMeal,
       image: strMealThumb,
     };
+
     doneRecipes.push(completedRecipe);
     localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
+
+    const currentDate = new Date();
+    const formattedDate = currentDate.toLocaleDateString();
+    const formattedTime = currentDate.toLocaleTimeString();
+  
+
+    const finishRecipeDates = JSON.parse(localStorage.getItem('finishRecipeDates') || '[]');
+    const finishRecipeTimes = JSON.parse(localStorage.getItem('finishRecipeTimes') || '[]');
+  
+    finishRecipeDates.push(formattedDate);
+    finishRecipeTimes.push(formattedTime);
+  
+    localStorage.setItem('finishRecipeDates', JSON.stringify(finishRecipeDates));
+    localStorage.setItem('finishRecipeTimes', JSON.stringify(finishRecipeTimes));
+  
+
     navigate('/done-recipes');
 };
 
@@ -207,7 +226,7 @@ function MealsInProgress() {
         </>
        
       ) : (
-        <p>Loading...</p>
+        <p id="loading">Loading...</p>
       )}      
 
       <div className="containerLabel">
@@ -266,19 +285,17 @@ function MealsInProgress() {
             {favorite ? (
                 <div onClick={handleFavoritre} 
                 className="botaoCoracao">
-                  <FontAwesomeIcon
-                    icon={faHeartSolid}
-                    data-testid="favorite-btn"
-                    color="red" 
-                  />
+                  <img 
+                            src={ aberto } 
+                            alt="coração aberto"
+                            id="abertoCoracao"/>
                 </div>
               ) : (
                 <div onClick={handleFavoritre} className="botaoCoracao">
-                  <FontAwesomeIcon
-                    icon={faHeartRegular}
-                    data-testid="favorite-btn"
-                    color="black"
-                  />
+                  <img 
+                            src={ fechado } 
+                            alt="coração fechado"
+                            id="fechadoCoracao"/>
                 </div>
             )}
           </div>

@@ -1,31 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Drink } from '../../../utils/types';
-import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
-import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import aberto from '../../../images/coracaoAberto.png'
+import fechado from '../../../images/coracaoFechado.png'
 
 import YouTube from 'react-youtube';
+import { RecipeVideo }  from '../../../utils/Helpers';
 
 import share from '../../../images/share.png'
-
-function RecipeVideo({ strYoutube }: { strYoutube: string }) {
-  if (!strYoutube) {
-    return null;
-  }
-
-  const videoId = strYoutube.split('v=')[1];
-  const options = { 
-    height: '250px',
-    width: '100%'
-  };
-
-  return (
-    <div className="youtubeContainer" data-testid="video">
-      <YouTube className="youtube" videoId={videoId} opts={options} /> 
-    </div>
-  );
-}
 
 function DrinksInProgress() {
   const { recipeId } = useParams();
@@ -158,6 +141,10 @@ function DrinksInProgress() {
 
   const HandleClick = () => {
     const { idDrink, strAlcoholic, strDrink, strDrinkThumb } = trem[0];
+  
+    const storedData = localStorage.getItem('doneRecipes');
+    const doneRecipes2 = storedData ? JSON.parse(storedData) : [];
+    
     const completedRecipe = {
       id: idDrink,
       type: 'drink',
@@ -165,14 +152,28 @@ function DrinksInProgress() {
       name: strDrink,
       image: strDrinkThumb,
     };
+  
 
-    const storedData = localStorage.getItem('doneRecipes');
-    const doneRecipes = storedData ? JSON.parse(storedData) : [];
+    doneRecipes2.push(completedRecipe);
+    localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes2));
+   
+    const currentDate = new Date();
+    const formattedDate = currentDate.toLocaleDateString();
+    const formattedTime = currentDate.toLocaleTimeString();
+  
 
-    doneRecipes.push(completedRecipe);
-    localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
+    const finishRecipeDates = JSON.parse(localStorage.getItem('finishRecipeDates') || '[]');
+    const finishRecipeTimes = JSON.parse(localStorage.getItem('finishRecipeTimes') || '[]');
+  
+    finishRecipeDates.push(formattedDate);
+    finishRecipeTimes.push(formattedTime);
+  
+    localStorage.setItem('finishRecipeDates', JSON.stringify(finishRecipeDates));
+    localStorage.setItem('finishRecipeTimes', JSON.stringify(finishRecipeTimes));
+  
     navigate('/done-recipes');
-  };
+  };  
+  
 
   const regex = /\./g;
   const strYoutube = trem[0]?.strYoutube ?? '';
@@ -205,7 +206,7 @@ function DrinksInProgress() {
       </>
      
     ) : (
-      <p>Loading...</p>
+      <p id="loading">Loading...</p>
     )}  
 
     <div className="containerLabel">
@@ -254,7 +255,7 @@ function DrinksInProgress() {
 
         <div className="sectionIcons">
 
-          { copied && <span className="linkCopied">Link copied!</span> }
+          { copied && <p className="linkCopied" font-colorz='#e75516'>Link copied!</p> }
 
           <img src={ share } alt="share icon" 
               className="shareIcon"
@@ -266,19 +267,17 @@ function DrinksInProgress() {
             {favorite ? (
                 <div onClick={ handleFavoritre } 
                 className="botaoCoracao">
-                  <FontAwesomeIcon
-                    icon={faHeartSolid}
-                    data-testid="favorite-btn"
-                    color="red" 
-                  />
+                   <img 
+                            src={ aberto } 
+                            alt="coração aberto"
+                            id="abertoCoracao"/>
                 </div>
               ) : (
                 <div onClick={ handleFavoritre } className="botaoCoracao">
-                  <FontAwesomeIcon
-                    icon={faHeartRegular}
-                    data-testid="favorite-btn"
-                    color="black"
-                  />
+                   <img 
+                            src={ fechado } 
+                            alt="coração fechado"
+                            id="fechadoCoracao"/>
                 </div>
             )}
           </div>

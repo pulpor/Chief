@@ -7,9 +7,8 @@ import DrinksContext from '../../../context/DrinksContext';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 
-import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
-import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import aberto from '../../../images/coracaoAberto.png'
+import fechado from '../../../images/coracaoFechado.png'
 
 import YouTube from 'react-youtube';
 
@@ -119,8 +118,6 @@ function MealDetails() {
     setFavorite(!favorite);
   };
 
-  const regex = /\./g;
-
   const settingsSlider = {
     infinite: true,
     speed: 500,
@@ -133,7 +130,13 @@ function MealDetails() {
   const memoizedRecipeVideo = useMemo(() => {
     return <RecipeVideo strYoutube={recipe?.strYoutube ?? ''} />;
   }, [recipe?.strYoutube]);
+
+  const textoFormatado = recipe?.strInstructions.replace(/\s*([0-9]+\.|STEP\s+[0-9]+)\s*/g, '\n$1\n');
+
+
+  console.log(textoFormatado);
   
+
   return (
     <div className='containerDetails'>
       {recipe ? ( 
@@ -182,8 +185,9 @@ function MealDetails() {
           </div>
 
           <h3 className='h3Details'>Instructions:</h3>
+
           <p className='p2Details' data-testid="instructions">
-            { recipe.strInstructions.replace(regex, '.\n') }
+            { textoFormatado }
           </p>
 
         <div className="containerFundo">
@@ -254,19 +258,17 @@ function MealDetails() {
                       {favorite ? (
                           <div onClick={handleFavoritre} 
                           className="botaoCoracao">
-                            <FontAwesomeIcon
-                              icon={faHeartSolid}
-                              data-testid="favorite-btn"
-                              color="red" 
-                            />
+                            <img 
+                            src={ aberto } 
+                            alt="coração aberto"
+                            id="abertoCoracao"/>
                           </div>
                         ) : (
                           <div onClick={handleFavoritre} className="botaoCoracao">
-                            <FontAwesomeIcon
-                              icon={faHeartRegular}
-                              data-testid="favorite-btn"
-                              color="black"
-                            />
+                            <img 
+                            src={ fechado } 
+                            alt="coração fechado"
+                            id="fechadoCoracao"/>
                           </div>
                       )}
                     </div>

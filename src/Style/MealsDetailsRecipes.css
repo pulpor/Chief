@@ -322,7 +322,6 @@ input[type="checkbox"] {
 .shareIcon,
 .botaoCoracao {
   position: relative;
-  z-index: 1; 
 }
 
 .linkCopied { 
