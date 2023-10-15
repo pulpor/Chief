@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useMemo } from 'react';
+import React, { useContext, useEffect, useState, useMemo } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import DrinksContext from '../../../context/DrinksContext';
@@ -149,7 +149,7 @@ function DrinkDetails() {
           </h2>
 
           <p className='pDetails' data-testid="recipe-category">
-            {recipe.strAlcoholic}
+            { recipe.strAlcoholic }
           </p>
 
           <h3 className='h3Details'>Ingredients:</h3>
@@ -192,7 +192,7 @@ function DrinkDetails() {
         {memoizedRecipeVideo}
 
         <h3 className='h3Details2'>
-          Acompanhamento:
+          Accompaniment:
         </h3>
 
 
@@ -201,7 +201,7 @@ function DrinkDetails() {
 
             {meals.slice(0, 6).map((receita: Meal, index: number) => (
               
-            <>
+            <React.Fragment key={receita.idMeal}>
               <Link to={`/meals/${receita.idMeal}`} key={receita.idMeal}>
                 
                 <div
@@ -237,33 +237,19 @@ function DrinkDetails() {
 
                     { copied && <span className="linkCopied">Link copied!</span> }
 
-                    <div className="agrupamentoRecommendation">
+                    
                       <img src={ share } alt="" 
                         className="shareIcon"
                         data-testid="share-btn"
                         onClick={ handleShare }
                       />
 
-                      {favorite ? (
-                        <div onClick={handleFavorite} className="botaoCoracao">
-                          <img 
-                          src={aberto} 
-                          alt="coração aberto"
-                          id="abertoCoracao"/>
-                        </div>
-                      ) : (
-                        <div onClick={handleFavorite} className="botaoCoracao">
-                          <img 
-                          src={fechado} 
-                          alt="coração fechado"
-                          id="fechadoCoracao"/>
-                        </div>
-                      )}
-                    </div>
+                     
+                   
                 </div>
               </div>
 
-            </>
+            </React.Fragment>
             ))}
 
           </Slider>

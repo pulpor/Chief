@@ -65,6 +65,10 @@
 
 .searchBtn{
   background-color: #e04f5f;
+  width: 90%;
+  height: 30px;
+  border-radius: 5px;
+  margin-bottom: 5px;
 }
 
 #done{
@@ -82,3 +86,22 @@
   font-weight: 900;
   color: #e75516;
 }
+
+.agrupadorIcons{
+  width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+.containerButtonCategorys{
+  width: 100%;
+  height: 100px;
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  margin-top: -50px;
+}
+
+

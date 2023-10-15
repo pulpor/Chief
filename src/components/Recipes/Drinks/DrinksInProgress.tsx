@@ -224,7 +224,7 @@ function DrinksInProgress() {
                 type="checkbox"
                 id={`checkbox-${index}`}
                 value={ingredient}
-                onClick={() => handleIngredientClick(ingredient)}
+                onChange={() => handleIngredientClick(ingredient)}
                 checked={completedIngredients.includes(ingredient)}
               />
 
@@ -279,7 +279,7 @@ function DrinksInProgress() {
                             alt="coração fechado"
                             id="fechadoCoracao"/>
                 </div>
-            )}
+              )}
           </div>
 
         </div>

@@ -90,7 +90,7 @@ function SearchBar() {
       return;
     }
   
-    if (searchType === 'ingredient') {
+    else if (searchType === 'ingredient') {
       await fetchByIngredients();
       if ((location.pathname === '/meals' && isMeal.length === 0) || (location.pathname === '/drinks' && isDrink.length === 0)) {
         window.alert('No recipes were found for these filters');

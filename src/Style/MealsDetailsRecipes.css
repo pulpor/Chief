@@ -20,6 +20,9 @@
 
 .btnRecipe{
   margin-bottom: 25px;
+  width: 90%;
+  height: 30px;
+  border-radius: 5px;
 }
 
 .h2Details{
@@ -327,5 +330,9 @@ input[type="checkbox"] {
 .linkCopied { 
   color: #e75516;
   z-index: 2;
+}
+
+.bodyCategorys{
+  height: 1350px;
 }
 

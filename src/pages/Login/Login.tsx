@@ -64,10 +64,12 @@ export function Login() {
           className="buttonLogin"
           data-testid="login-submit-btn"
           disabled={ !isValidEmailValue || !isValidPassword }
+          style={{ opacity: (!isValidEmailValue || !isValidPassword) ? 0.6 : 1 }}
           onClick={ handleSubmit }
         >
           Login
         </button>
+
 
       </form>
     </div>

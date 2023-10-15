@@ -203,7 +203,7 @@ function MealDetails() {
           {memoizedRecipeVideo}
         
         <h3 className='h3Details2'>
-          Acompanhamento:
+          Accompaniment:
         </h3>
 
         <div className="container">

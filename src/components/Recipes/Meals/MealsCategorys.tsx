@@ -16,6 +16,7 @@ function MealsCategorys() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [filteredMeals, setFilteredMeals] = useState<Meal[]>([]);
   
+  
   const itemsPerPage = 12;
   const [startIndex, setStartIndex] = useState(1)
   
@@ -59,17 +60,22 @@ function MealsCategorys() {
         }
       } else {
         setFilteredMeals(meals);
+        setStartIndex(1)
       }
     };
 
     fetchFilteredMeals();
   }, [meals, selectedCategory]);
 
+  const displayedMeals = filteredMeals ? filteredMeals.slice(startIndex, startIndex + 12) : [];
+
   const handleCategoryClick = (category: string) => {
     if (selectedCategory === category) {
-      setSelectedCategory(null); // limpa o filtro
+      setSelectedCategory(null); // limpa 
+      setStartIndex(1);
     } else {
-      setSelectedCategory(category); // aplica o filtro
+      setSelectedCategory(category);
+      setStartIndex(1);
     }
   };
 
@@ -86,8 +92,7 @@ function MealsCategorys() {
   };
 
   return (
-    <div>
-
+    <>
       <div className="idCategorys">
         <div className="categorys">
           <div className="buttons">
@@ -120,7 +125,7 @@ function MealsCategorys() {
       </div>
 
       <div className="containerCategorys">
-      {filteredMeals.slice(startIndex, startIndex + itemsPerPage).map((meal, index) => (
+      {displayedMeals.map((meal, index) => (
           <Link 
             to={ `/meals/${meal.idMeal}` } 
             key={ meal.idMeal }
@@ -152,7 +157,7 @@ function MealsCategorys() {
         ))}
       </div>
 
-      <div className="containerButtonCategorys">
+      <span className="containerButtonCategorys">
 
         <button
           onClick={handleButtonClick2}
@@ -170,9 +175,9 @@ function MealsCategorys() {
           >
           Next
         </button>
-      </div>
+      </span>
 
-    </div>
+    </>
   );
 }
 

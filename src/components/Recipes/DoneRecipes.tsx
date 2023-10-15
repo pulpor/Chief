@@ -6,6 +6,7 @@ import shareIcon from '../../images/share.png';
 import all from '../../images/all_all.svg';
 import meal from '../../images/meat/all.svg';
 import drink from '../../images/drink/all.svg';
+import trash from  '../../images/lixeira.png';
 
 function DoneRecipes() {
   const [doneRecipes, setDoneRecipes] = useState<FavoriteAndDoneRecipes[]>([]);
@@ -71,6 +72,12 @@ function DoneRecipes() {
   const clearFilter = () => {
     setFilter(null);
   };
+
+  const removeRecipe = (recipeId: string) => {
+    const updatedRecipes = doneRecipes.filter((recipe) => recipe.id !== recipeId);
+    setDoneRecipes(updatedRecipes);
+    localStorage.setItem('doneRecipes', JSON.stringify(updatedRecipes));
+  };
   
   return (
     <>
@@ -104,7 +111,6 @@ function DoneRecipes() {
       </div>
 
       {doneRecipes.map((recipe, index) => {
-        console.log(recipe.doneDate)
         const handleShareClick = () => {
           const pathName = window.location.pathname;
           const urlType = pathName.includes('/meals') ? 'meals' : 'drinks';
@@ -167,16 +173,29 @@ function DoneRecipes() {
                       </p>
                     ))}
 
-                  <button onClick={ () => handleShareClick() }>
+                  <div className="agrupadorIcons">
 
-                    <img
-                      className="shareIcon"
-                      src={ shareIcon }
-                      alt="Share"
-                      data-testid={ `${index}-horizontal-share-btn` }
-                    />
+                    <button onClick={ () => handleShareClick() }>
 
-                  </button>
+                      <img
+                        className="shareIcon"
+                        src={ shareIcon }
+                        alt="Share"
+                        data-testid={ `${index}-horizontal-share-btn` }
+                      />
+
+                    </button>
+
+                    <button onClick={() => removeRecipe(recipe.id)}>
+                      <img
+                        className="shareIcon"
+                        src={ trash }
+                        alt="Excluir"
+                        data-testid={`${index}-horizontal-trash-btn`}
+                      />
+                    </button>
+                    
+                  </div>
 
                   {copy && <span className="linkCopied">Link copied!</span>}
 

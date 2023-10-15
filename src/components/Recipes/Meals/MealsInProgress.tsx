@@ -243,7 +243,7 @@ function MealsInProgress() {
                   type="checkbox"
                   id={`checkbox-${index}`}
                   value={ingredient}
-                  onClick={() => handleIngredientClick(ingredient)}
+                  onChange={() => handleIngredientClick(ingredient)}
                   checked={completedIngredients.includes(ingredient)}
                 />
                 {ingredient}

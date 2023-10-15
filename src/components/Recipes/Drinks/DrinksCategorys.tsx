@@ -30,7 +30,6 @@ function DrinksCategorys() {
   }
   
 
-
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -60,17 +59,22 @@ function DrinksCategorys() {
         }
       } else {
         setFilteredDrinks(drinks);
+        setStartIndex(1)
       }
     };
 
     fetchFilteredDrinks();
   }, [selectedCategory, drinks]);
 
+  const displayedDrinks = filteredDrinks.slice(startIndex, startIndex + 12);
+  
   const handleCategoryClick = (category: string) => {
     if (selectedCategory === category) {
-      setSelectedCategory(null); // limpa o filtro
+      setSelectedCategory(null); // limpa 
+      setStartIndex(1)
     } else {
-      setSelectedCategory(category); // aplica o filtro
+      setSelectedCategory(category);
+      setStartIndex(1)
     }
   };
 
@@ -123,7 +127,7 @@ function DrinksCategorys() {
       </div>
 
       <div className="containerCategorys">
-         {filteredDrinks.slice(startIndex, startIndex + itemsPerPage).map((drink, index) => (
+         {displayedDrinks.map((drink, index) => (
           <Link 
             to={ `/drinks/${drink.idDrink}` } 
             key={ drink.idDrink }
@@ -159,13 +163,13 @@ function DrinksCategorys() {
         ))}
       </div>
 
-       <div className="containerButtonCategorys">
-       <button
-          onClick={handleButtonClick2}
-          data-testid="see-previous-button"
-          className="recipe-button btn-hover color-4 btnRecipe"
-          style={{ opacity: startIndex <= 12 ? 0.6 : 1 }}
-        >
+      <div className="containerButtonCategorys">
+        <button
+            onClick={handleButtonClick2}
+            data-testid="see-previous-button"
+            className="recipe-button btn-hover color-4 btnRecipe"
+            style={{ opacity: startIndex <= 12 ? 0.6 : 1 }}
+          >
           Previous
         </button>
 
@@ -178,8 +182,7 @@ function DrinksCategorys() {
           Next
         </button>
 
-
-      </div>
+       </div>
 
     </div>
   );
