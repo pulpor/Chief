@@ -1,44 +1,41 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
 import { FavoriteAndDoneRecipes } from '../../utils/types';
 
 import all from '../../images/all_all.svg';
 import meal from '../../images/meat/all.svg';
 import drink from '../../images/drink/all.svg';
-
-
-import aberto from '../../images/coracaoAberto.png'
-import fechado from '../../images/coracaoFechado.png'
-
+import shareIcon from '../../images/share.png';
+import trash from  '../../images/lixeira.png';
 
 function FavoriteRecipes() {
   const [favorites, setFavorites] = useState<FavoriteAndDoneRecipes[]>([]);
-  const [filter, setFilter] = useState<any | null>(null);
-  const [copy, setCopy] = useState('');
-
-
-  const handleFavorite = (recipe: FavoriteAndDoneRecipes) => {
-    if (localStorage.getItem('favoriteRecipes')) {
-      const newFavorites = favorites
-        .filter((e) => e.id !== recipe.id) as FavoriteAndDoneRecipes[];
-      localStorage.setItem('favoriteRecipes', JSON.stringify(newFavorites));
-      setFavorites(newFavorites);
-    }
-  };
+  const [filter, setFilter] = useState<string | null>(null);
+  const [copiedRecipeIndex, setCopiedRecipeIndex] = useState<number | null>(null);
 
   const handleLinkCopy = (recipe: FavoriteAndDoneRecipes) => {
     const newLink = `${window.location.origin}/${recipe.type}s/${recipe.id}`;
     navigator.clipboard.writeText(newLink).then(() => {
-      setCopy(recipe.id);
+      setCopiedRecipeIndex(favorites.indexOf(recipe));
+      setTimeout(() => {
+        setCopiedRecipeIndex(null);
+      }, 1000);
     });
   };
 
-  useEffect(() => {
-    setFavorites(JSON.parse(localStorage
-      .getItem('favoriteRecipes') || '[]') as FavoriteAndDoneRecipes[]);
-  }, []);
+  const removeRecipe = (recipeId: string) => {
+    const updatedRecipes = favorites.filter((recipe) => recipe.id !== recipeId);
+    setFavorites(updatedRecipes);
+    localStorage.setItem('favoriteRecipes', JSON.stringify(updatedRecipes));
+  };
 
+  useEffect(() => {
+    const favoriteLS = localStorage.getItem('favoriteRecipes');
+    if (favoriteLS) {
+      const newFav: FavoriteAndDoneRecipes[] = JSON.parse(favoriteLS);
+      setFavorites(newFav);
+    }
+  }, []);
 
   const filterMeals = () => {
     setFilter('meal');
@@ -52,86 +49,89 @@ function FavoriteRecipes() {
     setFilter(null);
   };
 
+  // const [url, setUrl] = useState('meals');
+
   return (
     <>
+      <div className="favoriteBody">
+        <div className="containerDone">
+          <button
+            data-testid="filter-by-all-btn"
+            id="AllButtonRecipe"
+            onClick={clearFilter}
+          >
+            <img src={all} title="All" />
+          </button>
+          <button
+            data-testid="filter-by-meal-btn"
+            id="MealButtonRecipe"
+            onClick={filterMeals}
+          >
+            <img src={meal} title="Meals" />
+          </button>
+          <button
+            data-testid="filter-by-drink-btn"
+            id="DrinksButtonRecipe"
+            onClick={filterDrinks}
+          >
+            <img src={drink} title="Drinks" />
+          </button>
+        </div>
 
-      <div className="containerDone">
-        
-        <button
-          data-testid="filter-by-all-btn"
-          id="AllButtonRecipe"
-          onClick={ clearFilter }
-        >
-          <img src={ all } title="All"/>
-        </button>
-
-        <button
-          data-testid="filter-by-meal-btn"
-          id="MealButtonRecipe"
-          onClick={ filterMeals }
-        >
-          <img src={ meal } title="Meals"/>
-        </button>
-
-        <button
-          data-testid="filter-by-drink-btn"
-          id="DrinksButtonRecipe"
-          onClick={ filterDrinks }
-        >
-          <img src={ drink } title="Drinks"/>
-        </button>
-      
+        {favorites
+          .filter(
+            (recipe) =>
+              (recipe.type === 'meal' || recipe.type === 'drink') &&
+              (filter === recipe.type || filter === null)
+          )
+          .map((recipe, index) => (
+            <div key={index}>
+              <Link to={`/${recipe.type}s/${recipe.id}`}>
+                <div className="containerImgPrincipal">
+                  <img
+                    data-testid={`${index}-horizontal-image`}
+                    id="principalDetail"
+                    alt={recipe.name}
+                    src={recipe.image}
+                  />
+                </div>
+              </Link>
+              <div className="agrupamentoFinal2">
+                <Link className="h2Details" to={`/${recipe.type}s/${recipe.id}`}>
+                  <h2 className="h2Details" data-testid={`${index}-horizontal-name`}>
+                    {recipe.name}
+                  </h2>
+                </Link>
+                <p className="pDetails" data-testid={`${index}-horizontal-top-text`}>
+                  {`${recipe.nationality || recipe.name} - ${recipe.category || recipe.alcoholicOrNot}`}
+                </p>
+                <div className="containerFinal2">
+                  <div className="agrupadorIcons2">
+                    <button onClick={() => handleLinkCopy(recipe)}>
+                      <img
+                        className="shareIcon"
+                        src={shareIcon}
+                        alt="Share"
+                        data-testid={`${index}-horizontal-share-btn`}
+                      />
+                    </button>
+                    <button onClick={() => removeRecipe(recipe.id)}>
+                      <img
+                        className="shareIcon"
+                        src={trash}
+                        alt="Excluir"
+                        data-testid={`${index}-horizontal-trash-btn`}
+                      />
+                    </button>
+                  </div>
+                  {copiedRecipeIndex === index && (
+                    <span className="linkCopied">Link copied!</span>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
       </div>
-
-      
-      {favorites.filter((recipe) => (
-        filter === 'meal' && recipe.type === 'meal')
-        || (filter === 'drink' && recipe.type === 'drink') || filter === '')
-        .map((recipe, index) => (
-          <div key={ index }>
-
-            <Link to={ `/${recipe.type}s/${recipe.id}` }>
-              <div data-testid={ `${index}-horizontal-name` }>{recipe.name}</div>
-            </Link>
-
-            <Link to={ `/${recipe.type}s/${recipe.id}` }>
-              <img
-                data-testid={ `${index}-horizontal-image` }
-                alt={ recipe.name }
-                src={ recipe.image }
-              />
-            </Link>
-
-            <div data-testid={ `${index}-horizontal-top-text` }>
-              {recipe.type === 'meal'
-                ? `${recipe.nationality} - ${recipe.category}`
-                : `${recipe.alcoholicOrNot}`}
-            </div>
-
-            <div>
-              { copy === recipe.id ? <p>Link copied!</p> : null }
-
-              <button onClick={ () => handleLinkCopy(recipe) }>
-                <img
-                  data-testid={ `${index}-horizontal-share-btn` }
-                  src={ aberto }
-                  alt="shareIcon"
-                />
-              </button>
-
-              <button onClick={ () => handleFavorite(recipe) }>
-                <img
-                  data-testid={ `${index}-horizontal-favorite-btn` }
-                  src={ fechado }
-                  alt="blackHeart"
-                />
-              </button>
-
-            </div>
-
-          </div>
-
-        ))}
     </>
   );
 }

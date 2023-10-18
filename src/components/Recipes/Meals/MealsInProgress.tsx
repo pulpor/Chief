@@ -5,26 +5,9 @@ import { Meal } from '../../../utils/types';
 import aberto from '../../../images/coracaoAberto.png'
 import fechado from '../../../images/coracaoFechado.png'
 
-import YouTube from 'react-youtube';
+import { RecipeVideo }  from '../../../utils/Helpers';
+
 import share from '../../../images/share.png'
-
-function RecipeVideo({ strYoutube }: { strYoutube: string }) {
-  if (!strYoutube) {
-    return null;
-  }
-
-  const videoId = strYoutube.split('v=')[1];
-  const options = { 
-    height: '250px',
-    width: '100%'
-  };
-
-  return (
-    <div className="youtubeContainer" data-testid="video">
-      <YouTube className="youtube" videoId={videoId} opts={options} /> 
-    </div>
-  );
-}
 
 function MealsInProgress() {
   const { recipeId } = useParams();
@@ -34,13 +17,13 @@ function MealsInProgress() {
   const [completedIngredients, setCompletedIngredients] = useState<string[]>([]);
   const [allIngredientsCompleted, setAllIngredientsCompleted] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [favorite, setFavorite] = useState(false);
+  const [favorite, setFavorite] = useState(true);
 
-  const getIngredients = (meal: any) => {
+  const getIngredients = (meal: Meal): unknown[] => {
     const ingredientsSet = new Set();
   
     for (let i = 1; i <= 20; i++) {
-      const ingredient = meal && meal[`strIngredient${i}`];
+      const ingredient = meal?.[`strIngredient${i}`];
       if (ingredient) {
         ingredientsSet.add(ingredient);
       }
@@ -68,7 +51,7 @@ function MealsInProgress() {
   }, [recipeId]);
 
   useEffect(() => {
-    const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes') || '[]');
+    const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes') ?? '[]');
     const isFavorite = favoriteRecipes
       .some((recipe: any) => recipe.id === recipeId && recipe.type === 'meal');
     setFavorite(isFavorite);
@@ -177,8 +160,8 @@ function MealsInProgress() {
     const formattedTime = currentDate.toLocaleTimeString();
   
 
-    const finishRecipeDates = JSON.parse(localStorage.getItem('finishRecipeDates') || '[]');
-    const finishRecipeTimes = JSON.parse(localStorage.getItem('finishRecipeTimes') || '[]');
+    const finishRecipeDates = JSON.parse(localStorage.getItem('finishRecipeDates') ?? '[]');
+    const finishRecipeTimes = JSON.parse(localStorage.getItem('finishRecipeTimes') ?? '[]');
   
     finishRecipeDates.push(formattedDate);
     finishRecipeTimes.push(formattedTime);
@@ -263,7 +246,7 @@ function MealsInProgress() {
 
       <div className="lastIcons">
         <button
-          className={`recipe-button btn-hover color-4 lstRecipe ${!allIngredientsCompleted ? 'disabled-button' : ''}`} 
+         className={`recipe-button btn-hover color-4 btnRecipe btnFin ${!allIngredientsCompleted ? 'disabled-button' : ''}`} 
           data-testid="finish-recipe-btn"
           disabled={ !allIngredientsCompleted }
           onClick={ HandleClick }
@@ -286,16 +269,17 @@ function MealsInProgress() {
                 <div onClick={handleFavoritre} 
                 className="botaoCoracao">
                   <img 
-                            src={ aberto } 
-                            alt="coração aberto"
-                            id="abertoCoracao"/>
+                            src={ fechado } 
+                            alt="coração fechado"
+                            id="fechadoCoracao"/>
                 </div>
               ) : (
                 <div onClick={handleFavoritre} className="botaoCoracao">
                   <img 
-                            src={ fechado } 
-                            alt="coração fechado"
-                            id="fechadoCoracao"/>
+                    src={ aberto } 
+                    alt="coração aberto"
+                    id="abertoCoracao"  />
+                            
                 </div>
             )}
           </div>

@@ -1,3 +1,7 @@
+.DoneRecipes, .favoriteBody{
+  padding-bottom: 70px;
+}
+
 #profile{
   font-size: 20px;
   font-family: Arial, Helvetica, sans-serif;
@@ -36,7 +40,7 @@
 .prof{
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: end;
   height: 50px;
 }
 
@@ -53,14 +57,28 @@
   font-size: 12px;
   font-family: Arial, Helvetica, sans-serif;
   color: #161e27;
+  position: absolute;
 }
 
 .containerFinal{
-  height: 50px;
+  width: 100%;
+  height: 25px;
+  margin-top: 20px;
   display: flex;
-  margin-bottom: 50px;
   align-items: center;
   justify-content: space-evenly;
+
+}
+
+.containerFinal2{
+  width: 100%;
+  height: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  position: absolute;
+  margin-top: 20px;
+  margin-bottom: 50px;
 }
 
 .searchBtn{
@@ -94,6 +112,13 @@
   justify-content: space-between;
 }
 
+.agrupadorIcons2{
+  width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: absolute;
+}
 
 .containerButtonCategorys{
   width: 100%;
@@ -104,4 +129,68 @@
   margin-top: -50px;
 }
 
+.divisoria{
+  width: 150px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+}
 
+.containerCopy{
+  width: 100%;
+  height: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.agrupamentoFinal{
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.agrupamentoFinal2{
+  height: 100px;
+}
+
+.gridTester {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2px;
+}
+
+.containerConteudo{
+  width: 100%;
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.doneOn{
+  height: 15px;
+  width: 150px;
+}
+
+.btnFin{
+  width: 70%;
+  margin: 0;
+}
+
+.containerProfileBtn{
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.btnProfile{
+  margin: 0;
+}
+
+.barrinhaInferior{
+}

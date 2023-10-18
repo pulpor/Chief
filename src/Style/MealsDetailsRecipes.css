@@ -4,6 +4,7 @@
   justify-content: center;
   align-items: center;
   height: 380px;
+  position: relative;
 }
 
 #principalDetail {
@@ -11,6 +12,7 @@
   height: 320px;
   border-radius: 15%;
   box-shadow: 2px 2px 10px rgba(72, 6, 0, 0.5);
+
 }
 
 .containerDetails{
@@ -315,7 +317,7 @@ input[type="checkbox"] {
   justify-content: space-between;
   align-items: center;
   width: 50px;
-  margin-left: 15px;
+  margin-right: 5px;
 }
 
 .disabled-button {
@@ -330,6 +332,14 @@ input[type="checkbox"] {
 .linkCopied { 
   color: #e75516;
   z-index: 2;
+  margin-top: 50px;
+}
+
+.linkCopied2 { 
+  color: #e75516;
+  z-index: 2;
+  margin-top: 50px;
+  position: absolute;
 }
 
 .bodyCategorys{

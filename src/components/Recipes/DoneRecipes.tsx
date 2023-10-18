@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+
 import { FavoriteAndDoneRecipes } from '../../utils/types';
-import shareIcon from '../../images/share.png';
 
 import all from '../../images/all_all.svg';
 import meal from '../../images/meat/all.svg';
 import drink from '../../images/drink/all.svg';
+import shareIcon from '../../images/share.png';
 import trash from  '../../images/lixeira.png';
 
 function DoneRecipes() {
   const [doneRecipes, setDoneRecipes] = useState<FavoriteAndDoneRecipes[]>([]);
-  console.log(doneRecipes);
+  const [filter, setFilter] = useState<string | null>(null);
   
-  const [filter, setFilter] = useState<any | null>(null);
-  const [copy, setCopy] = useState(false)
+  const [copiedRecipeIndex, setCopiedRecipeIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const DoneRecipesLS = localStorage.getItem('doneRecipes');
@@ -26,17 +26,38 @@ function DoneRecipes() {
     }
   }, [filter]);
 
-  const formated = (index: any) => {
-    const finishRecipeDates = JSON.parse(localStorage.getItem('finishRecipeDates') || '[]') || [];
-    const finishRecipeTimes = JSON.parse(localStorage.getItem('finishRecipeTimes') || '[]') || [];
+  const formated = (index: number) => {
+    const finishRecipeDates = JSON.parse(localStorage.getItem('finishRecipeDates') ?? '[]') || [];
+    const finishRecipeTimes = JSON.parse(localStorage.getItem('finishRecipeTimes') ?? '[]') || [];
   
     if (index >= 0 && index < finishRecipeDates.length && index < finishRecipeTimes.length) {
-      const finishRecipe = `${finishRecipeDates[index]} - ${finishRecipeTimes[index]}`;
-      return finishRecipe;
+
+      const brazilLocale = 'pt-BR';
+      const dateParts = finishRecipeDates[index].split('/');
+      const timeParts = finishRecipeTimes[index].split(':');
+  
+      if (dateParts.length === 3 && timeParts.length === 3) {
+        const day = parseInt(dateParts[0], 10);
+        const month = parseInt(dateParts[1], 10) - 1;
+        const year = parseInt(dateParts[2], 10);
+  
+        const hours = parseInt(timeParts[0], 10);
+        const minutes = parseInt(timeParts[1], 10);
+        const seconds = parseInt(timeParts[2], 10);
+  
+        const date = new Date(year, month, day, hours, minutes, seconds);
+        date.setUTCHours(date.getUTCHours()); // São Paulo (GMT-3)
+  
+        const formattedDate = date.toLocaleString(brazilLocale);
+  
+        return formattedDate;
+      }
     }
   
     return '';
   };
+  
+
   
 
   const filterRecipes = (
@@ -45,10 +66,11 @@ function DoneRecipes() {
   ) => {
     if (selectedFilter === 'meal') {
       return recipes.filter((recipe) => recipe.type === 'meal');
-    } if (selectedFilter === 'drink') {
+    } else if (selectedFilter === 'drink') {
       return recipes.filter((recipe) => recipe.type === 'drink');
+    } else {
+      return recipes;
     }
-    return recipes;
   };
 
   useEffect(() => {
@@ -60,6 +82,8 @@ function DoneRecipes() {
   }, []);
 
   const [url, setUrl] = useState('meals');
+  console.log(url);
+  
 
   const filterMeals = () => {
     setFilter('meal');
@@ -81,6 +105,7 @@ function DoneRecipes() {
   
   return (
     <>
+    <div className="DoneRecipes">
       <div className="containerDone">
         
         <button
@@ -111,27 +136,29 @@ function DoneRecipes() {
       </div>
 
       {doneRecipes.map((recipe, index) => {
-        const handleShareClick = () => {
-          const pathName = window.location.pathname;
-          const urlType = pathName.includes('/meals') ? 'meals' : 'drinks';
-          setUrl(urlType);
-          const recipeURL = `http://localhost:3000/${url}/${recipe.id}`;
-          navigator.clipboard.writeText(recipeURL);
-          setCopy(true);
-          setTimeout(() => {
-            setCopy(false);
-          }, 1000);
-        };
+          const isCopied = copiedRecipeIndex === index;
+          
+          const handleShareClick = (index: number, recipeType: string) => {
+            setUrl(recipeType); 
+            const recipeURL = `${window.location.origin}/${recipeType}s/${doneRecipes[index].id}`;
+            navigator.clipboard.writeText(recipeURL);
+          
+            setCopiedRecipeIndex(index);
+          
+            setTimeout(() => {
+              setCopiedRecipeIndex(null);
+            }, 1000);
+          };
 
         const recipeMatchesFilter = (filter === 'meal' && recipe.type === 'meal')
           || (filter === 'drink' && recipe.type === 'drink')
           || filter === null;
 
         return (
-          <div key={ index }>
+          <div key={ index } className="bodyDone">
             
             {recipeMatchesFilter ? (
-              <div>
+              <div className="gridTester">
                 
                 <Link to={ `/${recipe.type}s/${recipe.id}` }>
                   <div className="containerImgPrincipal">
@@ -157,34 +184,36 @@ function DoneRecipes() {
                   {`${recipe.nationality || recipe.name } - ${recipe.category || recipe.alcoholicOrNot}`}
                 </p>
 
-                <div className="containerFinal">
+                <div className="agrupamentoFinal">
 
-                  <p className="pDetails2" data-testid={ `${index}-horizontal-done-date` }>
-                    <span id="done">Done on:</span> {formated(index)}
-                  </p>
+                  <div className="doneOn">
 
-                  {recipe.tags && Array.isArray(recipe.tags) && recipe.tags
-                    .slice(0, 2).map((tag: any, tagIndex: any) => (
-                      <p
-                        key={ `${index}-${tagIndex}` }
-                        data-testid={ `${index}-${tag}-horizontal-tag` }
-                      >
-                        {tag}
-                      </p>
-                    ))}
+                    <p className="pDetails2" data-testid={ `${index}-horizontal-done-date` }>
+                      <span id="done">Done on:</span> {formated(index)}
+                    </p>
+
+                    {recipe.tags && Array.isArray(recipe.tags) && recipe.tags
+                      .slice(0, 2).map((tag: string) => (
+                        <p
+                          key={ `${recipe.id}-${tag}` }
+                          data-testid={ `${recipe.id}-${tag}-horizontal-tag` }
+                        >
+                          {tag}
+                        </p>
+                      ))}
+                      
+                  </div>
 
                   <div className="agrupadorIcons">
 
-                    <button onClick={ () => handleShareClick() }>
-
-                      <img
-                        className="shareIcon"
-                        src={ shareIcon }
-                        alt="Share"
-                        data-testid={ `${index}-horizontal-share-btn` }
-                      />
-
-                    </button>
+                  <button onClick={() => handleShareClick(index, recipe.type)}>
+                    <img
+                      className="shareIcon"
+                      src={shareIcon}
+                      alt="Share"
+                      data-testid={`${index}-horizontal-share-btn`}
+                    />
+                  </button>
 
                     <button onClick={() => removeRecipe(recipe.id)}>
                       <img
@@ -193,20 +222,23 @@ function DoneRecipes() {
                         alt="Excluir"
                         data-testid={`${index}-horizontal-trash-btn`}
                       />
-                    </button>
-                    
+                    </button>        
+              
                   </div>
+                  
+                  {isCopied && (
+                        <span className="linkCopied2">Link copied!</span>
+                      )}
 
-                  {copy && <span className="linkCopied">Link copied!</span>}
+                </div> 
 
-                </div>
-                {' '}
-
+             
               </div>
             ) : null}
           </div>
         );
       })}
+      </div>
     </>
   );
 }

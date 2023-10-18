@@ -5,7 +5,6 @@ import { Drink } from '../../../utils/types';
 import aberto from '../../../images/coracaoAberto.png'
 import fechado from '../../../images/coracaoFechado.png'
 
-import YouTube from 'react-youtube';
 import { RecipeVideo }  from '../../../utils/Helpers';
 
 import share from '../../../images/share.png'
@@ -20,11 +19,11 @@ function DrinksInProgress() {
   const [copied, setCopied] = useState(false);
   const [favorite, setFavorite] = useState(false);
 
-  const getIngredients = (meal: any) => {
+  const getIngredients = (drink: Drink): unknown[] => {
     const ingredientsSet = new Set();
   
     for (let i = 1; i <= 20; i++) {
-      const ingredient = meal && meal[`strIngredient${i}`];
+      const ingredient = drink?.[`strIngredient${i}`];
       if (ingredient) {
         ingredientsSet.add(ingredient);
       }
@@ -51,7 +50,7 @@ function DrinksInProgress() {
   }, [recipeId]);
 
   useEffect(() => {
-    const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes') || '[]');
+    const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes') ?? '[]');
     const isFavorite = favoriteRecipes
       .some((recipe: any) => recipe.id === recipeId && recipe.type === 'drink');
     setFavorite(isFavorite);
@@ -162,8 +161,8 @@ function DrinksInProgress() {
     const formattedTime = currentDate.toLocaleTimeString();
   
 
-    const finishRecipeDates = JSON.parse(localStorage.getItem('finishRecipeDates') || '[]');
-    const finishRecipeTimes = JSON.parse(localStorage.getItem('finishRecipeTimes') || '[]');
+    const finishRecipeDates = JSON.parse(localStorage.getItem('finishRecipeDates') ?? '[]');
+    const finishRecipeTimes = JSON.parse(localStorage.getItem('finishRecipeTimes') ?? '[]');
   
     finishRecipeDates.push(formattedDate);
     finishRecipeTimes.push(formattedTime);
@@ -245,7 +244,7 @@ function DrinksInProgress() {
 
       <div className="lastIcons">
         <button
-          className={`recipe-button btn-hover color-4 lstRecipe ${!allIngredientsCompleted ? 'disabled-button' : ''}`} 
+          className={`recipe-button btn-hover color-4 btnRecipe btnFin ${!allIngredientsCompleted ? 'disabled-button' : ''}`} 
           data-testid="finish-recipe-btn"
           disabled={ !allIngredientsCompleted }
           onClick={ HandleClick }
@@ -268,16 +267,16 @@ function DrinksInProgress() {
                 <div onClick={ handleFavoritre } 
                 className="botaoCoracao">
                    <img 
-                            src={ aberto } 
-                            alt="coração aberto"
-                            id="abertoCoracao"/>
+                            src={ fechado } 
+                            alt="coração fechado"
+                            id="fechadoCoracao"/>
                 </div>
               ) : (
                 <div onClick={ handleFavoritre } className="botaoCoracao">
                    <img 
-                            src={ fechado } 
-                            alt="coração fechado"
-                            id="fechadoCoracao"/>
+                            src={ aberto } 
+                            alt="coração aberto"
+                            id="abertoCoracao"/>
                 </div>
               )}
           </div>

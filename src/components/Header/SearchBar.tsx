@@ -42,45 +42,55 @@ function SearchBar() {
   }, [isDrink, isMeal, navigate]);
 
   const fetchByFistLetter = async () => {
-    try {
-      console.log('Fetching by first letter:', myQuery);
-      if (isDrinksPage) {
-        const recipes = await searchDrinksByFirstLetter(myQuery);
-        setIsDrink(recipes);
-        setDrinks(recipes);
-      } else if (isMealsPage) {
-        const recipes = await searchRecipesByFirstLetter(myQuery);
-        setIsMeal(recipes);
-        setMeals(recipes);
-      }
-    } catch (error) {
-      console.error('Error fetching by first letter:', error);
+    let recipes;
+    if (isDrinksPage) {
+      recipes = await searchDrinksByFirstLetter(myQuery);
+      setIsDrink(recipes);
+      setDrinks(recipes);
+    } else if (isMealsPage) {
+      recipes = await searchRecipesByFirstLetter(myQuery);
+      setIsMeal(recipes);
+      setMeals(recipes);
+    }
+
+    if (!recipes || recipes.length === 0) {
+      window.alert('No recipes were found for these filters');
     }
   };
 
   const fetchByName = async () => {
-    console.log('Fetching by name:', myQuery);
+    let recipes;
+
     if (isDrinksPage) {
-      const recipes = await searchDrinksByName(myQuery);
+      recipes = await searchDrinksByName(myQuery);
       setIsDrink(recipes);
       setDrinks(recipes);
     } else if (isMealsPage) {
-      const recipes = await searchRecipesByName(myQuery);
+      recipes = await searchRecipesByName(myQuery);
       setIsMeal(recipes);
       setMeals(recipes);
+    }
+
+    if (!recipes || recipes.length === 0) {
+      window.alert('No recipes were found for these filters');
     }
   };
 
   const fetchByIngredients = async () => {
+    let recipes;
 
-    if (isDrinksPage) {
-      const recipes = await searchDrinksByIngredient(myQuery);
-      setIsDrink(recipes);
-      setDrinks(recipes);
-    } else if (isMealsPage) {
-      const recipes = await searchRecipesByIngredient(myQuery);
-      setIsMeal(recipes);
-      setMeals(recipes);
+      if (isDrinksPage) {
+        recipes = await searchDrinksByIngredient(myQuery);
+        setIsDrink(recipes);
+        setDrinks(recipes);
+      } else if (isMealsPage) {
+        recipes = await searchRecipesByIngredient(myQuery);
+        setIsMeal(recipes);
+        setMeals(recipes);
+      }
+    
+    if (!recipes || recipes.length === 0) {
+      window.alert('No recipes were found for these filters');
     }
   };
 
@@ -88,25 +98,18 @@ function SearchBar() {
     if (searchType === 'first-letter' && myQuery.length !== 1) {
       window.alert('Your search must have only 1 (one) character');
       return;
-    }
-  
-    else if (searchType === 'ingredient') {
+    } else if (searchType === 'ingredient') {
       await fetchByIngredients();
-      if ((location.pathname === '/meals' && isMeal.length === 0) || (location.pathname === '/drinks' && isDrink.length === 0)) {
-        window.alert('No recipes were found for these filters');
-      }
     } else if (searchType === 'name') {
       await fetchByName();
-      if ((location.pathname === '/meals' && isMeal.length === 0) || (location.pathname === '/drinks' && isDrink.length === 0)) {
-        window.alert('No recipes were found for these filters');
-      }
     } else if (searchType === 'first-letter') {
       await fetchByFistLetter();
-      if ((location.pathname === '/meals' && isMeal.length === 0) || (location.pathname === '/drinks' && isDrink.length === 0)) {
-        window.alert('No recipes were found for these filters');
-      }
     }
-  }
+  
+    if ((location.pathname === '/meals' && isMeal.length === null) || (location.pathname === '/drinks' && isDrink.length === null)) {
+      window.alert('No recipes were found for these filters');
+    }
+  };  
   
   return (
     <div className='searchContainer'>

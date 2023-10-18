@@ -7,9 +7,6 @@ import DrinksContext from '../../../context/DrinksContext';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 
-import aberto from '../../../images/coracaoAberto.png'
-import fechado from '../../../images/coracaoFechado.png'
-
 import YouTube from 'react-youtube';
 
 import { Drink, Meal } from '../../../utils/types';
@@ -114,10 +111,6 @@ function MealDetails() {
     setFavorite(isFavorite);
   }, [recipe, setFavMeals]);
 
-  const handleFavoritre = () => {
-    setFavorite(!favorite);
-  };
-
   const settingsSlider = {
     infinite: true,
     speed: 500,
@@ -131,11 +124,8 @@ function MealDetails() {
     return <RecipeVideo strYoutube={recipe?.strYoutube ?? ''} />;
   }, [recipe?.strYoutube]);
 
-  const textoFormatado = recipe?.strInstructions.replace(/\s*([0-9]+\.|STEP\s+[0-9]+)\s*/g, '\n$1\n');
-
-
-  console.log(textoFormatado);
-  
+  const textoFormatado = recipe?.strInstructions.replace(/\s*(\d+\.|STEP\s+\d+)\s*/g, '\n$1\n');
+  console.log(textoFormatado);  
 
   return (
     <div className='containerDetails'>
@@ -248,30 +238,12 @@ function MealDetails() {
 
                     { copied && <span className="linkCopied">Link copied!</span> }
 
-                    <div className="agrupamentoRecommendation">
+                    
                       <img src={ share } alt="" 
                         className="shareIcon"
                         data-testid="share-btn"
                         onClick={ handleShare }
                       />
-
-                      {favorite ? (
-                          <div onClick={handleFavoritre} 
-                          className="botaoCoracao">
-                            <img 
-                            src={ aberto } 
-                            alt="coração aberto"
-                            id="abertoCoracao"/>
-                          </div>
-                        ) : (
-                          <div onClick={handleFavoritre} className="botaoCoracao">
-                            <img 
-                            src={ fechado } 
-                            alt="coração fechado"
-                            id="fechadoCoracao"/>
-                          </div>
-                      )}
-                    </div>
                 </div>
               </div>
 

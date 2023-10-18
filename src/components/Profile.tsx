@@ -39,7 +39,7 @@ function Profile() {
         <button 
           data-testid="profile-done-btn" 
           onClick={ handleDoneRecipesClick }
-          className={`recipe-button btn-hover color-4 btnRecipe`}
+          className={`recipe-button btn-hover color-4 btnRecipe btnProfile`}
         >
           Done Recipes
         </button>
@@ -47,7 +47,7 @@ function Profile() {
         <button 
           data-testid="profile-favorite-btn" 
           onClick={ handleFavoriteRecipesClick }
-          className={`recipe-button btn-hover color-4 btnRecipe`}
+          className={`recipe-button btn-hover color-4 btnRecipe btnProfile`}
         >
           Favorite Recipes
         </button>
@@ -55,7 +55,7 @@ function Profile() {
         <button 
           data-testid="profile-logout-btn" 
           onClick={ handleLogoutClick }
-          className={`recipe-button btn-hover color-4 btnRecipe`}
+          className={`recipe-button btn-hover color-4 btnRecipe btnProfile`}
         >
           Logout
         </button>
