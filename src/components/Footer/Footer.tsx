@@ -14,6 +14,7 @@ function Footer() {
             data-testid="drinks-bottom-btn"
           />
         </Link>
+        
         <Link to="/meals">
           <img
             id="cutlery"
