@@ -4,6 +4,7 @@ import MealsProvider from './context/MealsProvider';
 import DrinksProvider from './context/DrinksProvider';
 import UtilsProvider from './context/UtilsContext';
 import Router from './Router';
+import React from 'react';
 
 function App() {
   return (

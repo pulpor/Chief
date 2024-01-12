@@ -101,7 +101,6 @@ describe('Componente de Login', () => {
     fireEvent.change(emailInput, { target: { value: testeEmail } });
     fireEvent.change(passwordInput, { target: { value: 'senhavalida' } });
     fireEvent.click(loginButton);
-    // Aqui, você pode verificar se a rota mudou para "/meals"
   });
 
   it('não permite submeter o formulário se o botão estiver desabilitado', () => {
@@ -112,8 +111,6 @@ describe('Componente de Login', () => {
     );
     const loginButton = screen.getByTestId(loginSubmitButton);
     fireEvent.click(loginButton);
-    // Verifique se a submissão do formulário não ocorreu
-    // Isso pode ser feito verificando se a rota não mudou ou se o usuário não foi redirecionado
   });
 
   it('exibe mensagem de erro ao tentar fazer login com credenciais inválidas', () => {
@@ -128,6 +125,5 @@ describe('Componente de Login', () => {
     fireEvent.change(emailInput, { target: { value: 'email@exemplo.com' } });
     fireEvent.change(passwordInput, { target: { value: 'senhaerrada' } });
     fireEvent.click(loginButton);
-    // Verifique se uma mensagem de erro é exibida na tela
   });
 });

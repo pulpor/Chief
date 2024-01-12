@@ -23,7 +23,7 @@ function DrinksInProgress() {
     const ingredientsSet = new Set();
   
     for (let i = 1; i <= 20; i++) {
-      const ingredient = drink?.[`strIngredient${i}`];
+      const ingredient = drink?.[`strIngredient${i}` as keyof Drink];
       if (ingredient) {
         ingredientsSet.add(ingredient);
       }
@@ -49,10 +49,15 @@ function DrinksInProgress() {
     fetchRecipeDetails();
   }, [recipeId]);
 
+  interface Recipe {
+    id: string;
+    type: string;
+  }
+
   useEffect(() => {
-    const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes') ?? '[]');
+    const favoriteRecipes: Recipe[] = JSON.parse(localStorage.getItem('favoriteRecipes') ?? '[]');
     const isFavorite = favoriteRecipes
-      .some((recipe: any) => recipe.id === recipeId && recipe.type === 'drink');
+      .some((recipe) => recipe.id === recipeId && recipe.type === 'drink');
     setFavorite(isFavorite);
   }, [recipeId]);
 
@@ -88,7 +93,7 @@ function DrinksInProgress() {
 
   const handleIngredientClick = (ingredient: string) => {
     if (completedIngredients.includes(ingredient)) {
-      setCompletedIngredients(completedIngredients.filter((item) => item !== ingredient));
+      setCompletedIngredients(completedIngredients.filter((item: string) => item !== ingredient));
     } else {
       setCompletedIngredients([...completedIngredients, ingredient]);
     }

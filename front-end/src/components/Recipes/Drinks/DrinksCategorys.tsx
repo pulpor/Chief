@@ -164,6 +164,7 @@ function DrinksCategorys() {
       </div>
 
       <div className="containerButtonCategorys">
+        
         <button
             onClick={handleButtonClick2}
             data-testid="see-previous-button"

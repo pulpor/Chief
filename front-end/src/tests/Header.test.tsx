@@ -1,6 +1,6 @@
 import { screen, fireEvent, render, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import Header from '../components/Header/Header';
+import Header from '../components/Header/Header.1';
 
 describe('Componente Header', () => {
   const PAGE_TITLE = 'page-title';

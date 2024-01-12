@@ -7,9 +7,6 @@ import MealsContext from '../../../context/MealsContext';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 
-import aberto from '../../../images/coracaoAberto.png'
-import fechado from '../../../images/coracaoFechado.png'
-
 import YouTube from 'react-youtube';
 
 import { Drink, Meal } from '../../../utils/types';
@@ -88,10 +85,6 @@ function DrinkDetails() {
       setFavDrinks([]);
     }
   }, [favorite, recipeContext, setFavDrinks]);
-
-  const handleFavorite = () => {
-    setFavorite(!favorite);
-  };
 
   useEffect(() => {
     if (favorite) {
@@ -238,14 +231,12 @@ function DrinkDetails() {
                     { copied && <span className="linkCopied">Link copied!</span> }
 
                     
-                      <img src={ share } alt="" 
+                      <img src={ share } 
+                        alt="share icon" 
                         className="shareIcon"
                         data-testid="share-btn"
                         onClick={ handleShare }
                       />
-
-                     
-                   
                 </div>
               </div>
 
