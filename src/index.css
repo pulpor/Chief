@@ -1,0 +1,217 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Core surfaces */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 9%;
+
+    /* Cards & elevated surfaces */
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 9%;
+
+    /* Popovers */
+    --popover: 0 0% 89%;
+    --popover-foreground: 0 0% 9%;
+
+    /* Primary brand - Caramel Orange */
+    --primary: 20 90% 48%;
+    --primary-foreground: 33 100% 96%;
+    --primary-glow: 28 90% 65%;
+
+    /* Secondary - Basil Green */
+    --secondary: 0 0% 32%;
+    --secondary-foreground: 0 0% 98%;
+
+    /* Muted surfaces */
+    --muted: 0 0% 63%;
+    --muted-foreground: 0 0% 9%;
+
+    /* Accent - Tomato Red */
+    --accent: 47 100% 96%;
+    --accent-foreground: 37 92% 50%;
+
+    /* Destructive */
+    --destructive: 0 72% 50%;
+    --destructive-foreground: 0 85% 97%;
+
+    /* Borders & inputs */
+    --border: 0 0% 83%;
+    --input: 0 0% 83%;
+    --ring: 20 90% 48%;
+
+    --radius: 0.75rem;
+
+    /* Custom design tokens */
+    --gradient-hero: linear-gradient(135deg, hsl(28 85% 55%) 0%, hsl(5 75% 55%) 100%);
+    --gradient-card: linear-gradient(180deg, transparent 0%, hsl(0 0% 0% / 0.03) 100%);
+
+    --shadow-soft: 0 2px 8px hsl(24 45% 15% / 0.08);
+    --shadow-medium: 0 4px 16px hsl(24 45% 15% / 0.12);
+    --shadow-strong: 0 8px 32px hsl(24 45% 15% / 0.16);
+
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 0 0% 9%;
+    --sidebar-primary: 20 90% 48%;
+    --sidebar-primary-foreground: 33 100% 96%;
+    --sidebar-accent: 0 0% 32%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 0 0% 83%;
+    --sidebar-ring: 20 90% 48%;
+    --chart-1: 27 95% 60%;
+    --chart-2: 43 96% 56%;
+    --chart-3: 47 95% 53%;
+    --chart-4: 24 94% 53%;
+    --chart-5: 0 0% 45%;
+    --sidebar: 0 0% 98%;
+    --font-sans: 'Roboto', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+    --font-serif: 'Libre Caslon Text', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+    --font-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+    --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+    --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 2px 4px -1px hsl(0 0% 0% / 0.1);
+    --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 4px 6px -1px hsl(0 0% 0% / 0.1);
+    --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 8px 10px -1px hsl(0 0% 0% / 0.1);
+    --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+    --tracking-normal: 0em;
+    --spacing: 0.25rem;
+  }
+
+  .dark {
+    --background: 0 0% 9%;
+    --foreground: 0 0% 98%;
+
+    --card: 0 0% 14%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 25%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 27 95% 60%;
+    --primary-foreground: 12 81% 14%;
+    --primary-glow: 28 90% 65%;
+
+    --secondary: 0 0% 45%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 0 0% 45%;
+    --muted-foreground: 0 0% 98%;
+
+    --accent: 20 91% 14%;
+    --accent-foreground: 43 96% 56%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 85% 97%;
+
+    --border: 0 0% 32%;
+    --input: 0 0% 32%;
+    --ring: 27 95% 60%;
+
+    --shadow-soft: 0 2px 8px hsl(0 0% 0% / 0.3);
+    --shadow-medium: 0 4px 16px hsl(0 0% 0% / 0.4);
+    --shadow-strong: 0 8px 32px hsl(0 0% 0% / 0.5);
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 27 95% 60%;
+    --sidebar-primary-foreground: 12 81% 14%;
+    --sidebar-accent: 43 96% 56%;
+    --sidebar-accent-foreground: 20 91% 14%;
+    --sidebar-border: 0 0% 32%;
+    --sidebar-ring: 27 95% 60%;
+    --chart-1: 30 97% 72%;
+    --chart-2: 45 96% 64%;
+    --chart-3: 48 96% 76%;
+    --chart-4: 27 95% 60%;
+    --chart-5: 0 0% 45%;
+    --sidebar: 0 0% 14%;
+    --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+    --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+    --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 2px 4px -1px hsl(0 0% 0% / 0.1);
+    --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 4px 6px -1px hsl(0 0% 0% / 0.1);
+    --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 8px 10px -1px hsl(0 0% 0% / 0.1);
+    --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-weight: 600;
+  }
+}
+
+/* Custom Tab Styles */
+@layer components {
+  .modern-tabs [role="tablist"] {
+    @apply bg-transparent p-1 gap-2;
+  }
+
+  .modern-tabs [role="tab"] {
+    @apply relative px-6 py-3 rounded-full font-medium transition-all duration-300;
+    @apply text-foreground/70 hover:text-foreground hover:bg-muted/50;
+    @apply border-2 border-transparent;
+  }
+
+  .modern-tabs [role="tab"][data-state="active"] {
+    @apply bg-gradient-to-r from-primary to-primary/90 text-primary-foreground;
+    @apply shadow-lg shadow-primary/20 border-primary/20;
+    @apply scale-105;
+  }
+
+  .modern-tabs [role="tab"][data-state="active"]::after {
+    content: '';
+    @apply absolute -bottom-1 left-1/2 -translate-x-1/2 w-12 h-1;
+    @apply bg-primary rounded-full;
+  }
+
+  /* Recipe Card Animations */
+  @keyframes float-in {
+    0% {
+      opacity: 0;
+      transform: translateY(30px) scale(0.95);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: float-in 0.6s ease-out forwards;
+  }
+
+  /* Stagger animation for cards */
+  .grid > *:nth-child(1) { animation-delay: 0ms; }
+  .grid > *:nth-child(2) { animation-delay: 75ms; }
+  .grid > *:nth-child(3) { animation-delay: 150ms; }
+  .grid > *:nth-child(4) { animation-delay: 225ms; }
+  .grid > *:nth-child(5) { animation-delay: 300ms; }
+  .grid > *:nth-child(6) { animation-delay: 375ms; }
+  .grid > *:nth-child(7) { animation-delay: 450ms; }
+  .grid > *:nth-child(8) { animation-delay: 525ms; }
+}
